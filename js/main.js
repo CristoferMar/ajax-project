@@ -3,22 +3,21 @@
 
 // destroyChildren to remove all children of thumbs
 
-var $toggleBtns = document.querySelectorAll('.large-btn');
+var $toggleBtn = document.querySelector('#toggle-Page');
 var gallery = document.querySelector('#recipe-gallery');
 
 var $navBar = document.querySelector('.nav-container');
 var $uniformColor = document.querySelectorAll('.green');
 var $body = document.querySelector('body');
-var mealNav = document.querySelector()
 
-console.log($toggleBtns);
+console.log($toggleBtn);
 
 $navBar.addEventListener('click', function (event) {
   event.preventDefault();
 
   if (event.target.matches('.large-btn')) {
     console.log(event.target.textContent);
-    toggleDB(event.target.textContent);
+    toggleDB();
 
 
   }
@@ -31,7 +30,7 @@ function clearGallery() {
   }
 }
 
-function toggleDB(DB) {
+function toggleDB() {
   clearGallery();
 
   if (data.currentDBmeals === true) {
@@ -45,11 +44,17 @@ function toggleDB(DB) {
     for (var i = 0; i < $uniformColor.length; i++) {
       $uniformColor[i].classList.replace('green', 'purple')
     }
+    $toggleBtn.classList.replace('purple', 'green');
+    $toggleBtn.textContent = 'Meals';
+
   } else {
     $body.classList.replace('drink-background', 'meal-background');
-    for (var i = 0; i < $uniformColor.length; i++) {
-      $uniformColor[i].classList.replace('purple', 'green')
+    for (i = 0; i < $uniformColor.length; i++) {
+      $uniformColor[i].classList.replace('purple', 'green');
+      $toggleBtn.classList.replace('green', 'purple');
+      $toggleBtn.textContent = 'Drink';
     }
+
   }
 
 
