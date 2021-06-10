@@ -5,14 +5,79 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AJAX Project</title>
   <link rel="icon" href="images/favicon.ico">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/layout.css">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body class="meal-background">
   <header>
+    <div class="nav-container green">
+      <div class="row space-between">
+        <div class="left-nav">
+          <h1 class="swap click home-btn" data-view="home">Home</h1>
+          <select class="expand click green" name="MyLists">
+            <option disabled selected hidden>My Lists</option>
+            <option class="swap" data-view="bookmarks">Bookmarked</option>
+            <option class="swap" data-view="loved">Loved</option>
+            <option class="swap" data-view="hated">Never Again</option>
+          </select>
+          <div class="colapse">
+            <a href="" class="swap click" data-view="bookmarks">Bookmarked</a>
+            <a href="" class="swap click" data-view="loved">Loved</a>
+            <a href="" class="swap click" data-view="hated">Never Again</a>
+          </div>
+        </div>
+        <div class="right-nav">
+          <img class="click randomize" src="images/mysteryBox.svg" alt="Mystery Box">
+          <button id="meals-Page" class="click large-btn green hidden">Meals</button>
+          <button id="drinks-Page" class="click large-btn purple">Drinks</button>
+        </div>
+      </div>
+    </div>
   </header>
   <main>
+
+      <div class="row">
+          <form class="search-form flex justify-center" action="">
+            <input class="search-bar meal-search" type="text" name="search" placeholder="Search">
+            <button class="click search-btn meal-search"><img class="spy" src="images/Spy_Glass.svg" alt=""></button>
+          </form>
+      </div>
+
+      <div class="row space-between" id="recipe-gallery">
+
+        <!-- ********Dummy*********** -->
+        <div class="swap recipe-thumb meal-border" data-view="recipie" id="53018">
+          <div class="left-img thumb-padding">
+            <img src="https://www.themealdb.com//images//media//meals//md8w601593348504.jpg" class="img-thumb" alt="">
+          </div>
+          <div class="center-brief thumb-padding">
+            <h2>Bigos (Hunters Stew)</h2>
+            <p>Origin: </p>
+            <p>Category: </p>
+          </div>
+          <div class="right-bookmark">
+            <img class="bookmark-trigger" src="images/Empty_Bookmark.svg">
+          </div>
+        </div>
+        <!-- ********Dummy*********** -->
+        <div class="swap recipe-thumb meal-border" data-view="recipie" id="53058">
+          <div class="left-img thumb-padding">
+            <img src="https://www.themealdb.com//images//media//meals//md8w601593348504.jpg" class="img-thumb" alt="">
+          </div>
+          <div class="center-brief thumb-padding">
+            <h2>Bigos (Hunters Stew)</h2>
+            <p>Origin: </p>
+            <p>Category: </p>
+          </div>
+          <div class="right-bookmark">
+            <img class="bookmark-trigger" src="images/Empty_Bookmark.svg">
+          </div>
+        </div>
+
+      </div>
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
