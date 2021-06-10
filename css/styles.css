@@ -14,6 +14,10 @@ h2 {
   margin: 0;
   font-weight: 400;
   font-size: 1.3rem;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 select {
@@ -36,6 +40,7 @@ a {
 
 p {
   margin: 0;
+  font-weight: 500;
 }
 
 .space-between {
@@ -131,7 +136,7 @@ p {
   display: flex;
 }
 
-.recipe-gallery {
+#recipe-gallery {
   flex-wrap: wrap;
 }
 
@@ -140,6 +145,7 @@ p {
   padding: 0.35rem;
   align-content: center;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .left-img {
@@ -156,13 +162,19 @@ p {
   border-radius: 5px;
   object-fit: cover;
   width: 100%;
-  height: 100%;
+  height: auto;
+  max-height: 100%;
 }
 
 .center-brief {
+  display: block;
   width: 64%;
 }
 
 .right-bookmark {
   width: 6%;
+}
+
+i {
+  font-weight: 300;
 }
