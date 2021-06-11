@@ -22,12 +22,14 @@
   border: 1px solid #08891c;
   border-radius: 5px;
   background-color: #fff;
+  color: #312d2d;
 }
 
 .drink-border {
   border: 2px solid #5f0ca1;
   border-radius: 5px;
   background-color: #161616;
+  color: #fff;
 }
 
 .recipe-thumb {
@@ -54,12 +56,12 @@
 
   .colapse {
     display: flex;
-    width: 240px;
+    width: 130px;
     justify-content: space-between;
   }
 
   .left-nav {
-    width: 335px;
+    width: 225px;
   }
 
   .search-bar {

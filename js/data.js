@@ -1,12 +1,11 @@
 /* exported data */
 var data = {
-  currentDBmeals: true,
+  currentDB: 'Meals',
+  currentPage: 'home',
   searchedMeals: [],
   bookmarkedMeals: [],
   lovedMeals: [],
-  avoidMeals: [],
   searchedDrinks: [],
   bookmarkedDrinks: [],
   lovedDrinks: [],
-  avoidDrinks: []
 };
