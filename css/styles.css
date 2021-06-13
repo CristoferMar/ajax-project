@@ -75,6 +75,16 @@ p {
   border-radius: 5px;
 }
 
+.seamless-btn {
+  border: none;
+  background-color: transparent;
+  padding: 0;
+}
+
+.color-white {
+  color: #fff;
+}
+
 .click {
   cursor: pointer;
 }

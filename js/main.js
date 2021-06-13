@@ -132,15 +132,20 @@ function generateThumb(response) {
 
   var $rightbtns = document.createElement('div');
   $rightbtns.className = 'right-bookmark';
+  var $bookmarkBtn = document.createElement('button');
+  $bookmarkBtn.className = 'bookmark-trigger seamless-btn';
   var $bookmark = document.createElement('img');
-  $bookmark.className = 'right-bookmark';
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
+  $bookmarkBtn.append($bookmark);
+  var $lovedBtn = document.createElement('button');
+  $lovedBtn.className = 'loved-trigger seamless-btn';
   var $loved = document.createElement('img');
-  $loved.className = 'loved-trigger';
+  $loved.className = 'full-center';
   $loved.setAttribute('src', heart);
-  $loved.setAttribute('alt', 'Like');
-  $rightbtns.append($bookmark, $loved);
+  $loved.setAttribute('alt', 'Love');
+  $lovedBtn.append($loved);
+  $rightbtns.append($bookmarkBtn, $lovedBtn);
 
   $recipeThumb.append($leftImg, $centerBrief, $rightbtns);
   gallery.appendChild($recipeThumb);
@@ -186,7 +191,7 @@ function toggleDB(currentDB) {
 
 function noResults() {
   var none = document.createElement('div');
-  none.className = 'meal-border justify-center full-center flex';
+  none.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
   var $thumb = document.createElement('div');
   $thumb.className = 'thumb-padding';
   var $h4 = document.createElement('h4');
