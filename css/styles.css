@@ -20,6 +20,11 @@ h2 {
   overflow: hidden;
 }
 
+h5 {
+  font-weight: 500;
+  margin: 0.5rem 0;
+}
+
 select {
   border: 1px solid rgba(255, 255, 255, 0.3);
   outline: 1px solid rgba(255, 255, 255, 0.3);
@@ -83,8 +88,6 @@ p {
   margin: 1rem 0;
 }
 
-/* ********************************** */
-
 /* Meal classes: */
 .green {
   background-color: #08891c;
@@ -115,7 +118,7 @@ p {
   background-color: #464646;
 }
 
-/* ***************************** */
+/* Drink classes ^ */
 
 .search-bar {
   height: 30px;
@@ -172,9 +175,17 @@ p {
 }
 
 .right-bookmark {
-  width: 6%;
+  width: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 i {
   font-weight: 300;
+}
+
+.full-center {
+  width: 100%;
+  text-align: center;
 }
