@@ -9,6 +9,8 @@ var $body = document.querySelector('body');
 var $searchBar = document.querySelector('.search-form');
 var searchCount = 0;
 var $searchImg = document.querySelector('.spy');
+var $start = document.querySelector('#start-page');
+$start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
 
 $navBar.addEventListener('click', function (event) {
   event.preventDefault();
@@ -208,3 +210,5 @@ function noResults() {
   none.append($thumb);
   gallery.append(none);
 }
+
+toggleDB(data.currentDB);
