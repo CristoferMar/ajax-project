@@ -29,6 +29,7 @@ $navBar.addEventListener('click', function (event) {
     clearGallery();
     data['searched' + data.currentDB] = [];
     searchCount = 6;
+    $searchBar.reset();
     for (var i = 0; i < 6; i++) {
       responseGET(getRecipeIDs, 'random.php');
     }
