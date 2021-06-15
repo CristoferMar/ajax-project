@@ -23,7 +23,11 @@ $navBar.addEventListener('click', function (event) {
       data.currentDB = 'Meals';
     }
     toggleDB(data.currentDB);
+  }
 
+  if (event.target.closest('.randomize')) {
+    clearGallery();
+    data['searched' + data.currentDB] = [];
   }
 
 });
@@ -31,9 +35,9 @@ $navBar.addEventListener('click', function (event) {
 $searchBar.addEventListener('submit', function (event) {
   event.preventDefault();
   clearGallery();
+  data['searched' + data.currentDB] = [];
   var searched = $searchBar.elements.search.value.toLowerCase();
   if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
-  data['searched' + data.currentDB] = [];
 
   if (searched.length < 1) {
     return;
