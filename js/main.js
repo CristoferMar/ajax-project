@@ -63,7 +63,10 @@ function responseGET(neededFunction, callTail) {
   xhr.addEventListener('load', function () {
     searchCount--;
     if (xhr.response && xhr.response[page] !== null) {
-      neededFunction(xhr.response[page]);
+      var product = neededFunction(xhr.response[page]);
+      if (typeof product === 'object' && product.matches('.to-DOM')) {
+        gallery.appendChild(product);
+      }
     }
     if (searchCount === 0) {
       postSearch();
@@ -74,7 +77,7 @@ function responseGET(neededFunction, callTail) {
 
 function postSearch() {
   if (data['searched' + data.currentDB].length === 0) {
-    noResults();
+    gallery.append(noResults());
   }
 
   for (var i = data['searched' + data.currentDB].length - 1; i > 0; i--) {
@@ -97,7 +100,7 @@ function generateThumb(response) {
   if (data['loved' + data.currentDB].indexOf(recipeObject['id' + page]) >= 0) { heart = 'images/Filled_Heart.svg'; }
 
   var $recipeThumb = document.createElement('div');
-  $recipeThumb.className = 'swap recipe-thumb ' + page.toLowerCase() + '-border';
+  $recipeThumb.className = 'to-DOM swap recipe-thumb ' + page.toLowerCase() + '-border';
   $recipeThumb.setAttribute('data-view', data.currentPage);
   $recipeThumb.setAttribute('id', recipeObject['id' + page]);
 
@@ -150,7 +153,7 @@ function generateThumb(response) {
   $rightbtns.append($bookmarkBtn, $lovedBtn);
 
   $recipeThumb.append($leftImg, $centerBrief, $rightbtns);
-  gallery.appendChild($recipeThumb);
+  return $recipeThumb;
 }
 
 function getRecipeIDs(response) {
@@ -208,7 +211,7 @@ function noResults() {
   $h5D.textContent = 'Search Drinks by Alcoholic or Non Alcoholic.';
   $thumb.append($h4, $h5A, $h5B, $h5C, $h5D);
   none.append($thumb);
-  gallery.append(none);
+  return none;
 }
 
 toggleDB(data.currentDB);
