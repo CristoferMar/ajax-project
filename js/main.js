@@ -110,7 +110,7 @@ function generateThumb(response) {
 
   var $recipeThumb = document.createElement('div');
   $recipeThumb.className = 'to-DOM swap recipe-thumb ' + page.toLowerCase() + '-border';
-  $recipeThumb.setAttribute('data-view', data.currentPage);
+  $recipeThumb.setAttribute('data-view', data.currentPage + data.currentDB);
   $recipeThumb.setAttribute('id', recipeObject['id' + page]);
 
   var $leftImg = document.createElement('div');
