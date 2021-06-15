@@ -23,7 +23,16 @@ $navBar.addEventListener('click', function (event) {
       data.currentDB = 'Meals';
     }
     toggleDB(data.currentDB);
+  }
 
+  if (event.target.matches('.randomize')) {
+    clearGallery();
+    data['searched' + data.currentDB] = [];
+    searchCount = 6;
+    $searchBar.reset();
+    for (var i = 0; i < 6; i++) {
+      responseGET(getRecipeIDs, 'random.php');
+    }
   }
 
 });
@@ -31,9 +40,9 @@ $navBar.addEventListener('click', function (event) {
 $searchBar.addEventListener('submit', function (event) {
   event.preventDefault();
   clearGallery();
+  data['searched' + data.currentDB] = [];
   var searched = $searchBar.elements.search.value.toLowerCase();
   if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
-  data['searched' + data.currentDB] = [];
 
   if (searched.length < 1) {
     return;
@@ -142,6 +151,7 @@ function generateThumb(response) {
   var $bookmark = document.createElement('img');
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
+  $bookmark.className = 'full-center';
   $bookmarkBtn.append($bookmark);
   var $lovedBtn = document.createElement('button');
   $lovedBtn.className = 'loved-trigger seamless-btn';
