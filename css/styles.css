@@ -185,7 +185,7 @@ p {
 }
 
 .right-bookmark {
-  width: 18px;
+  width: 6%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -198,4 +198,9 @@ i {
 .full-center {
   width: 100%;
   text-align: center;
+}
+
+.bookmark-trigger,
+.loved-trigger {
+  max-width: 22px;
 }

@@ -25,9 +25,13 @@ $navBar.addEventListener('click', function (event) {
     toggleDB(data.currentDB);
   }
 
-  if (event.target.closest('.randomize')) {
+  if (event.target.matches('.randomize')) {
     clearGallery();
     data['searched' + data.currentDB] = [];
+    searchCount = 6;
+    for (var i = 0; i < 6; i++) {
+      responseGET(getRecipeIDs, 'random.php');
+    }
   }
 
 });
@@ -146,6 +150,7 @@ function generateThumb(response) {
   var $bookmark = document.createElement('img');
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
+  $bookmark.className = 'full-center';
   $bookmarkBtn.append($bookmark);
   var $lovedBtn = document.createElement('button');
   $lovedBtn.className = 'loved-trigger seamless-btn';
