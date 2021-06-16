@@ -28,7 +28,7 @@ h5 {
 select {
   border: 1px solid rgba(255, 255, 255, 0.3);
   outline: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  color: #fff;
   max-width: 73px;
   height: 20px;
 }
@@ -68,7 +68,7 @@ p {
 }
 
 .large-btn {
-  color: white;
+  color: #fff;
   font-weight: 600;
   padding: 0.4rem 0.9rem;
   border: none;
@@ -99,6 +99,11 @@ p {
 }
 
 /* Meal classes: */
+
+.meals {
+  color: #312d2d;
+}
+
 .green {
   background-color: #08891c;
 }
@@ -114,6 +119,11 @@ p {
 }
 
 /* Drink classes: */
+
+.drinks {
+  color: #fff;
+}
+
 .purple {
   background-color: #5f0ca1;
 }
@@ -139,6 +149,7 @@ p {
 }
 
 .search-btn {
+  height: 30px;
   border-left: 0;
   border-radius: 0 20px 20px 0;
   outline: 0;
@@ -203,4 +214,8 @@ i {
 .bookmark-trigger,
 .loved-trigger {
   max-width: 22px;
+}
+
+#page-header {
+  margin: 1rem 0;
 }

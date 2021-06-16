@@ -11,12 +11,12 @@ var data = {
   lovedDrinks: []
 };
 
-var oldDataJSON = localStorage.getItem('data');
+var oldDataJSON = localStorage.getItem('cookItUpData');
 if (oldDataJSON !== null) {
   data = JSON.parse(oldDataJSON);
 }
 
 window.addEventListener('beforeunload', function (event) {
   var dataJSON = JSON.stringify(data);
-  localStorage.setItem('data', dataJSON);
+  localStorage.setItem('cookItUpData', dataJSON);
 });
