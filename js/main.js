@@ -63,7 +63,6 @@ gallery.addEventListener('click', function (event) {
   if (event.target.matches('.bookmark')) {
     handleBookmark(event.target);
   }
-
 });
 
 function handleBookmark(target) {
