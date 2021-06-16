@@ -63,7 +63,23 @@ gallery.addEventListener('click', function (event) {
   if (event.target.matches('.bookmark')) {
     handleBookmark(event.target);
   }
+  if (event.target.matches('.loved')) {
+    handleHeart(event.target);
+  }
+
 });
+
+function handleHeart(target) {
+  var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
+  if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
+    target.setAttribute('src', 'images/Filled_Heart.svg');
+    data['loved' + data.currentDB].push(currentThumb);
+    return;
+  }
+  target.setAttribute('src', 'images/Empty_Heart.svg');
+  var position = data['loved' + data.currentDB].indexOf(currentThumb);
+  data['loved' + data.currentDB].splice(position, 1);
+}
 
 function handleBookmark(target) {
   var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
