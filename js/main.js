@@ -10,6 +10,7 @@ var $searchBar = document.querySelector('.search-form');
 var searchCount = 0;
 var $searchImg = document.querySelector('.spy');
 var $start = document.querySelector('#start-page');
+var $pageHeader = document.querySelector('#page-header');
 $start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
 
 $navBar.addEventListener('click', function (event) {
@@ -57,6 +58,25 @@ $searchBar.addEventListener('submit', function (event) {
   responseGET(getRecipeIDs, 'filter.php?a=' + searched); // area
   responseGET(getRecipeIDs, 'filter.php?c=' + searched); // category
 });
+
+gallery.addEventListener('click', function (event) {
+  if (event.target.matches('.bookmark')) {
+    handleBookmark(event.target);
+  }
+
+});
+
+function handleBookmark(target) {
+  var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
+  if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+    target.setAttribute('src', 'images/Checked_BookMark.svg');
+    data['bookmarked' + data.currentDB].push(currentThumb);
+    return;
+  }
+  target.setAttribute('src', 'images/Empty_Bookmark.svg');
+  var position = data['bookmarked' + data.currentDB].indexOf(currentThumb);
+  data['bookmarked' + data.currentDB].splice(position, 1);
+}
 
 function responseGET(neededFunction, callTail) {
   if (data.currentDB === 'Meals') {
@@ -151,12 +171,12 @@ function generateThumb(response) {
   var $bookmark = document.createElement('img');
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
-  $bookmark.className = 'full-center';
+  $bookmark.className = 'full-center bookmark';
   $bookmarkBtn.append($bookmark);
   var $lovedBtn = document.createElement('button');
   $lovedBtn.className = 'loved-trigger seamless-btn';
   var $loved = document.createElement('img');
-  $loved.className = 'full-center';
+  $loved.className = 'full-center loved';
   $loved.setAttribute('src', heart);
   $loved.setAttribute('alt', 'Love');
   $lovedBtn.append($loved);
@@ -182,7 +202,6 @@ function clearGallery() {
 }
 
 function toggleDB(currentDB) {
-
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
     for (var i = 0; i < $uniformColor.length; i++) {
@@ -202,6 +221,7 @@ function toggleDB(currentDB) {
     $toggleBtn.textContent = 'Drink';
     $searchImg.setAttribute('src', 'images/Spy_Glass.svg');
   }
+  $pageHeader.className = currentDB;
 }
 
 function noResults() {
