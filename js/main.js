@@ -220,7 +220,7 @@ function toggleDB(currentDB) {
     $toggleBtn.textContent = 'Drink';
     $searchImg.setAttribute('src', 'images/Spy_Glass.svg');
   }
-  $pageHeader.className = currentDB;
+  $pageHeader.className = currentDB.toLowerCase();
 }
 
 function noResults() {
