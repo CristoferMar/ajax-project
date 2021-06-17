@@ -12,6 +12,14 @@ var $searchImg = document.querySelector('.spy');
 var $start = document.querySelector('#start-page');
 var $pageHeader = document.querySelector('#page-header');
 $start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
+var $navSwappers = document.querySelectorAll('.nav-direct');
+
+console.log($navSwappers);
+
+window.addEventListener('DOMContentLoaded', function (event) {
+  toggleDB(data.currentDB);
+
+});
 
 $navBar.addEventListener('click', function (event) {
   event.preventDefault();
@@ -145,7 +153,7 @@ function generateThumb(response) {
 
   var $recipeThumb = document.createElement('div');
   $recipeThumb.className = 'to-DOM swap recipe-thumb ' + page.toLowerCase() + '-border';
-  $recipeThumb.setAttribute('data-view', data.currentPage + data.currentDB);
+  $recipeThumb.setAttribute('data-view', 'fullRecipe');
   $recipeThumb.setAttribute('id', recipeObject['id' + page]);
 
   var $leftImg = document.createElement('div');
@@ -219,7 +227,10 @@ function clearGallery() {
 function toggleDB(currentDB) {
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
-    for (var i = 0; i < $uniformColor.length; i++) {
+    for (var i = 0; i < $navSwappers.length; i++) {
+      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('meals', 'drinks'));
+    }
+    for (i = 0; i < $uniformColor.length; i++) {
       $uniformColor[i].classList.replace('green', 'purple');
       $searchBar.children[i].classList.replace('meal-search', 'drink-search');
     }
@@ -231,6 +242,9 @@ function toggleDB(currentDB) {
     for (i = 0; i < $uniformColor.length; i++) {
       $uniformColor[i].classList.replace('purple', 'green');
       $searchBar.children[i].classList.replace('drink-search', 'meal-search');
+    }
+    for (i = 0; i < $navSwappers.length; i++) {
+      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('drinks', 'meals'));
     }
     $toggleBtn.classList.replace('green', 'purple');
     $toggleBtn.textContent = 'Drink';
@@ -258,5 +272,3 @@ function noResults() {
   none.append($thumb);
   return none;
 }
-
-toggleDB(data.currentDB);
