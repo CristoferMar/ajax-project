@@ -160,7 +160,7 @@ p {
   display: flex;
 }
 
-#recipe-gallery {
+.wrap {
   flex-wrap: wrap;
 }
 

@@ -3,6 +3,11 @@
 
 var $toggleBtn = document.querySelector('#toggle-Page');
 var gallery = document.querySelector('#recipe-gallery');
+var $lovedMeals = document.querySelector('#lovedMeals');
+var $bookmarkedMeals = document.querySelector('#bookmarkedMeals');
+var $lovedDrinks = document.querySelector('#lovedDrinks');
+var $bookmarkedDrinks = document.querySelector('#bookmarkedDrinks');
+
 var $navBar = document.querySelector('.nav-container');
 var $uniformColor = document.querySelectorAll('.green');
 var $body = document.querySelector('body');
@@ -14,10 +19,16 @@ var $pageTitle = document.querySelector('#title');
 $start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
 var $navSwappers = document.querySelectorAll('.nav-direct');
 var allViews = document.querySelectorAll('.view');
+var $select = document.querySelector('select');
+var userDisplay = document.querySelector('.user-display');
 
 window.addEventListener('DOMContentLoaded', function (event) {
   toggleDB(data.currentDB);
+  viewSwap(data.currentPage);
+});
 
+$select.addEventListener('change', function (event) {
+  viewSwap(event.target.value);
 });
 
 $navBar.addEventListener('click', function (event) {
@@ -50,6 +61,37 @@ $navBar.addEventListener('click', function (event) {
 
 });
 
+$searchBar.addEventListener('submit', function (event) {
+  event.preventDefault();
+  clearGallery();
+  data['searched' + data.currentDB] = [];
+  var searched = $searchBar.elements.search.value.toLowerCase();
+  if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
+
+  if (searched.length < 1) {
+    return;
+  } else if (searched.length < 2) {
+    searchCount = 1;
+    responseGET(getRecipeIDs, 'search.php?f=' + searched);
+    return;
+  }
+  searchCount = 4;
+  responseGET(getRecipeIDs, 'search.php?s=' + searched); // name
+  responseGET(getRecipeIDs, 'filter.php?i=' + searched); // ingredient
+  responseGET(getRecipeIDs, 'filter.php?a=' + searched); // area
+  responseGET(getRecipeIDs, 'filter.php?c=' + searched); // category
+});
+
+userDisplay.addEventListener('click', function (event) {
+  if (event.target.matches('.bookmark')) {
+    handleBookmark(event.target);
+  }
+  if (event.target.matches('.loved')) {
+    handleHeart(event.target);
+  }
+
+});
+
 function viewSwap(location) {
   data.currentPage = location;
   for (var i = 0; i < allViews.length; i++) {
@@ -72,61 +114,81 @@ function viewSwap(location) {
       $pageTitle.firstElementChild.textContent = 'This will be the name of the recipe';
     }
   }
+  $select.selectedIndex = 0;
 }
 
-$searchBar.addEventListener('submit', function (event) {
-  event.preventDefault();
-  clearGallery();
-  data['searched' + data.currentDB] = [];
-  var searched = $searchBar.elements.search.value.toLowerCase();
-  if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
-
-  if (searched.length < 1) {
-    return;
-  } else if (searched.length < 2) {
-    searchCount = 1;
-    responseGET(getRecipeIDs, 'search.php?f=' + searched);
-    return;
-  }
-  searchCount = 4;
-  responseGET(getRecipeIDs, 'search.php?s=' + searched); // name
-  responseGET(getRecipeIDs, 'filter.php?i=' + searched); // ingredient
-  responseGET(getRecipeIDs, 'filter.php?a=' + searched); // area
-  responseGET(getRecipeIDs, 'filter.php?c=' + searched); // category
-});
-
-gallery.addEventListener('click', function (event) {
-  if (event.target.matches('.bookmark')) {
-    handleBookmark(event.target);
-  }
-  if (event.target.matches('.loved')) {
-    handleHeart(event.target);
-  }
-
-});
-
 function handleBookmark(target) {
+  if (data.currentDB === 'Meals') {
+    var destination = $bookmarkedMeals;
+  } else {
+    destination = $bookmarkedDrinks;
+  }
   var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
   if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
-    target.setAttribute('src', 'images/Checked_BookMark.svg');
     data['bookmarked' + data.currentDB].push(currentThumb);
+    var clone = target.closest('.recipe-thumb').cloneNode(true);
+    destination.prepend(clone);
+    for (var i = 0; i < userDisplay.children.length; i++) {
+      for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
+          userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', 'images/Checked_BookMark.svg');
+        }
+      }
+    }
     return;
   }
-  target.setAttribute('src', 'images/Empty_Bookmark.svg');
   var position = data['bookmarked' + data.currentDB].indexOf(currentThumb);
   data['bookmarked' + data.currentDB].splice(position, 1);
+  for (i = 0; i < destination.children.length; i++) {
+    if (destination.children[i].getAttribute('id') === currentThumb) {
+      destination.children[i].remove();
+      break;
+    }
+  }
+  for (i = 0; i < userDisplay.children.length; i++) {
+    for (j = 0; j < userDisplay.children[i].children.length; j++) {
+      if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
+        userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', 'images/Empty_Bookmark.svg');
+      }
+    }
+  }
 }
 
 function handleHeart(target) {
+  if (data.currentDB === 'Meals') {
+    var destination = $lovedMeals;
+  } else {
+    destination = $lovedDrinks;
+  }
   var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
   if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
-    target.setAttribute('src', 'images/Filled_Heart.svg');
     data['loved' + data.currentDB].push(currentThumb);
+    var clone = target.closest('.recipe-thumb').cloneNode(true);
+    destination.prepend(clone);
+    for (var i = 0; i < userDisplay.children.length; i++) {
+      for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
+          userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', 'images/Filled_Heart.svg');
+        }
+      }
+    }
     return;
   }
-  target.setAttribute('src', 'images/Empty_Heart.svg');
   var position = data['loved' + data.currentDB].indexOf(currentThumb);
   data['loved' + data.currentDB].splice(position, 1);
+  for (i = 0; i < destination.children.length; i++) {
+    if (destination.children[i].getAttribute('id') === currentThumb) {
+      destination.children[i].remove();
+      break;
+    }
+  }
+  for (i = 0; i < userDisplay.children.length; i++) {
+    for (j = 0; j < userDisplay.children[i].children.length; j++) {
+      if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
+        userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', 'images/Empty_Heart.svg');
+      }
+    }
+  }
 }
 
 function responseGET(neededFunction, callTail) {
@@ -257,6 +319,9 @@ function toggleDB(currentDB) {
     $body.classList.replace('meal-background', 'drink-background');
     for (var i = 0; i < $navSwappers.length; i++) {
       $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('Meals', 'Drinks'));
+      if ($navSwappers[i].nodeName === 'OPTION') {
+        $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace('Meals', 'Drinks'));
+      }
     }
     for (i = 0; i < $uniformColor.length; i++) {
       $uniformColor[i].classList.replace('green', 'purple');
@@ -274,12 +339,16 @@ function toggleDB(currentDB) {
     }
     for (i = 0; i < $navSwappers.length; i++) {
       $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('Drinks', 'Meals'));
+      if ($navSwappers[i].nodeName === 'OPTION') {
+        $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace('Drinks', 'Meals'));
+      }
     }
     $pageTitle.className = $pageTitle.className.replace('drinks', 'meals');
     $toggleBtn.classList.replace('green', 'purple');
     $toggleBtn.textContent = 'Drink';
     $searchImg.setAttribute('src', 'images/Spy_Glass.svg');
   }
+  $select.selectedIndex = 0;
 }
 
 function noResults() {
