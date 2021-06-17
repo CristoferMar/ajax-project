@@ -4,9 +4,9 @@ var data = {
   currentPage: 'searched',
   currentRecipe: {},
   searchedMeals: [],
+  searchedDrinks: [],
   bookmarkedMeals: [],
   lovedMeals: [],
-  searchedDrinks: [],
   bookmarkedDrinks: [],
   lovedDrinks: []
 };

@@ -16,36 +16,35 @@
     <div class="nav-container green">
       <div class="row space-between">
         <div class="left-nav">
-          <button data-view="searched" class="swap click seamless-btn color-white"><h1>Home</h1></button>
+          <button class="swap click seamless-btn color-white"><h1 data-view="searched" class="swap">Home</h1></button>
           <select class="expand click green" name="MyLists">
             <option disabled selected hidden>My Lists</option>
-            <option class="swap nav-direct" data-view="bookmarked-meals">Bookmarked</option>
-            <option class="swap nav-direct" data-view="loved-meals">Loved</option>
+            <option class="swap nav-direct" data-view="bookmarkedMeals">Bookmarked</option>
+            <option class="swap nav-direct" data-view="lovedMeals">Loved</option>
           </select>
           <div class="colapse">
-            <a href="" class="swap click nav-direct" data-view="bookmarked-meals">Bookmarked</a>
-            <a href="" class="swap click nav-direct" data-view="loved-meals">Loved</a>
+            <a href="" class="swap click nav-direct" data-view="bookmarkedMeals">Bookmarked</a>
+            <a href="" class="swap click nav-direct" data-view="lovedMeals">Loved</a>
           </div>
         </div>
         <div class="right-nav">
-          <button class="swap click randomize seamless-btn" data-view="searched"><img src="images/mysteryBox.svg" class="randomize" alt="Mystery Box"></button>
-          <button id="toggle-Page" class="click large-btn purple">Drinks</button>
+          <button class="click randomize seamless-btn"><img src="images/mysteryBox.svg" class="randomize" alt="Mystery Box"></button>
+          <button id="toggle-Page" class="swap click large-btn purple" data-view="searched">Drinks</button>
         </div>
       </div>
     </div>
   </header>
   <main>
 
-    <div class="row view hidden" data-view="Title">
-      <h1 id="page-header" class="meals">My Bookmarks</h1>
+    <div class="row view meals" data-view="title" id="title">
+      <h1 id="page-header">My Bookmarks</h1>
     </div>
-    <div class="row view" data-view="searched">
+    <div class="row view hidden" data-view="searched">
       <form class="search-form flex justify-center">
         <input class="search-bar meal-search" type="text" name="search" placeholder="Search">
         <button class="click search-btn meal-search"><img class="spy" src="images/Spy_Glass.svg" alt="search"></button>
       </form>
     </div>
-
 
     <div class="row space-between view" id="recipe-gallery" data-view="searched">
       <div id="start-page">
@@ -58,10 +57,18 @@
       </div>
     </div>
 
-    <div class="row space-between view hidden" id="loved-meals" data-view="loved-meals"></div>
-    <div class="row space-between view hidden" id="bookmarked-meals" data-view="bookmarked-meals"></div>
-    <div class="row space-between view hidden" id="loved-drinks" data-view="loved-drinks"></div>
-    <div class="row space-between view hidden" id="bookmarked-drinks" data-view="bookmarked-drinks"></div>
+    <div class="row space-between view hidden" data-view="lovedMeals">
+      <h1>loved-meals</h1>
+    </div>
+    <div class="row space-between view hidden" data-view="bookmarkedMeals">
+      <h1>bookmarked-meals</h1>
+    </div>
+    <div class="row space-between view hidden" data-view="lovedDrinks">
+      <h1>loved-drinks</h1>
+    </div>
+    <div class="row space-between view hidden" data-view="bookmarkedDrinks">
+      <h1>bookmarked-drinks</h1>
+    </div>
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>

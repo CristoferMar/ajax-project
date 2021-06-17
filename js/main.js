@@ -10,11 +10,10 @@ var $searchBar = document.querySelector('.search-form');
 var searchCount = 0;
 var $searchImg = document.querySelector('.spy');
 var $start = document.querySelector('#start-page');
-var $pageHeader = document.querySelector('#page-header');
+var $pageTitle = document.querySelector('#title');
 $start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
 var $navSwappers = document.querySelectorAll('.nav-direct');
-
-console.log($navSwappers);
+var allViews = document.querySelectorAll('.view');
 
 window.addEventListener('DOMContentLoaded', function (event) {
   toggleDB(data.currentDB);
@@ -35,6 +34,7 @@ $navBar.addEventListener('click', function (event) {
   }
 
   if (event.target.matches('.randomize')) {
+    viewSwap('searched');
     clearGallery();
     data['searched' + data.currentDB] = [];
     searchCount = 6;
@@ -44,7 +44,35 @@ $navBar.addEventListener('click', function (event) {
     }
   }
 
+  if (event.target.matches('.swap')) {
+    viewSwap(event.target.getAttribute('data-view'));
+  }
+
 });
+
+function viewSwap(location) {
+  data.currentPage = location;
+  for (var i = 0; i < allViews.length; i++) {
+    if (allViews[i].getAttribute('data-view') !== location) {
+      if (!allViews[i].matches('.hidden')) {
+        allViews[i].className = allViews[i].className.replace('view', 'view hidden');
+      }
+    } else {
+      allViews[i].className = allViews[i].className.replace('view hidden', 'view');
+    }
+  }
+
+  if (location !== 'searched') {
+    $pageTitle.className = $pageTitle.className.replace('view hidden', 'view');
+    if (location.match('bookmarked') !== null) {
+      $pageTitle.firstElementChild.textContent = 'My Bookmarks';
+    } else if (location.match('loved') !== null) {
+      $pageTitle.firstElementChild.textContent = 'My Favorites';
+    } else if (location.match('fullRecipe') !== null) {
+      $pageTitle.firstElementChild.textContent = 'This will be the name of the recipe';
+    }
+  }
+}
 
 $searchBar.addEventListener('submit', function (event) {
   event.preventDefault();
@@ -228,12 +256,13 @@ function toggleDB(currentDB) {
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
     for (var i = 0; i < $navSwappers.length; i++) {
-      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('meals', 'drinks'));
+      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('Meals', 'Drinks'));
     }
     for (i = 0; i < $uniformColor.length; i++) {
       $uniformColor[i].classList.replace('green', 'purple');
       $searchBar.children[i].classList.replace('meal-search', 'drink-search');
     }
+    $pageTitle.className = $pageTitle.className.replace('meals', 'drinks');
     $toggleBtn.classList.replace('purple', 'green');
     $toggleBtn.textContent = 'Meals';
     $searchImg.setAttribute('src', 'images/Spy_Glass_White.svg');
@@ -244,13 +273,13 @@ function toggleDB(currentDB) {
       $searchBar.children[i].classList.replace('drink-search', 'meal-search');
     }
     for (i = 0; i < $navSwappers.length; i++) {
-      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('drinks', 'meals'));
+      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace('Drinks', 'Meals'));
     }
+    $pageTitle.className = $pageTitle.className.replace('drinks', 'meals');
     $toggleBtn.classList.replace('green', 'purple');
     $toggleBtn.textContent = 'Drink';
     $searchImg.setAttribute('src', 'images/Spy_Glass.svg');
   }
-  $pageHeader.className = currentDB.toLowerCase();
 }
 
 function noResults() {
