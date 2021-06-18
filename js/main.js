@@ -125,6 +125,9 @@ function handleBookmark(target) {
   }
   var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
   if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+    if (destination.firstElementChild.matches('.full-center')) {
+      destination.firstElementChild.remove();
+    }
     data['bookmarked' + data.currentDB].push(currentThumb);
     var clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
@@ -152,6 +155,9 @@ function handleBookmark(target) {
       }
     }
   }
+  if (destination.children.length === 0) {
+    destination.append(nothingSaved(destination));
+  }
 }
 
 function handleHeart(target) {
@@ -162,6 +168,9 @@ function handleHeart(target) {
   }
   var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
   if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
+    if (destination.firstElementChild.matches('.full-center')) {
+      destination.firstElementChild.remove();
+    }
     data['loved' + data.currentDB].push(currentThumb);
     var clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
@@ -189,6 +198,24 @@ function handleHeart(target) {
       }
     }
   }
+  if (destination.children.length === 0) {
+    destination.append(nothingSaved(destination));
+  }
+}
+
+function nothingSaved(location) {
+  if (location.getAttribute('id').includes('Meals')) {
+    var page = 'meals';
+  } else {
+    page = 'drinks';
+  }
+  var none = document.createElement('div');
+  none.className = 'full-center';
+  var $h4 = document.createElement('h4');
+  $h4.className = page + ' full-center';
+  $h4.textContent = 'You have nothing stored in this page. Try Bookmarking or Liking some recipes.';
+  none.append($h4);
+  return none;
 }
 
 function responseGET(neededFunction, callTail) {

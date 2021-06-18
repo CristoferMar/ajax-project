@@ -20,6 +20,10 @@ h2 {
   overflow: hidden;
 }
 
+h4 {
+  font-weight: 400;
+}
+
 h5 {
   font-weight: 500;
   margin: 0.5rem 0;
