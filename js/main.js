@@ -25,6 +25,10 @@ var userDisplay = document.querySelector('.user-display');
 window.addEventListener('DOMContentLoaded', function (event) {
   toggleDB(data.currentDB);
   viewSwap(data.currentPage);
+  loadInList(data.bookMealThumbs, $bookmarkedMeals);
+  loadInList(data.lovedMealThumbs, $lovedMeals);
+  loadInList(data.bookDrinkThumbs, $bookmarkedDrinks);
+  loadInList(data.lovedDrinkThumbs, $lovedDrinks);
 });
 
 $select.addEventListener('change', function (event) {
@@ -92,6 +96,19 @@ userDisplay.addEventListener('click', function (event) {
 
 });
 
+function loadInList(pullFrom, appendTo) {
+  if (pullFrom.length === 0) {
+    return;
+  } else {
+    if (appendTo.firstElementChild.matches('.full-center')) {
+      appendTo.firstElementChild.remove();
+    }
+  }
+  for (var i = 0; i < pullFrom.length; i++) {
+    appendTo.append(generateThumb(pullFrom[i]));
+  }
+}
+
 function viewSwap(location) {
   data.currentPage = location;
   for (var i = 0; i < allViews.length; i++) {
@@ -145,12 +162,10 @@ function handleHeart(target) {
   if (data.currentDB === 'Meals') {
     var destination = $lovedMeals;
     var storageThumb = data.lovedMealThumbs;
-
   } else {
     destination = $lovedDrinks;
     storageThumb = data.lovedDrinkThumbs;
   }
-
   if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
     var targetData = generateStorage(target);
     storageThumb.unshift(targetData);
@@ -170,14 +185,12 @@ function handleHeart(target) {
     }
     return;
   }
-
   for (i = 0; i < storageThumb.length; i++) {
     if (storageThumb[i][0]['id' + page] === currentThumbID) {
       storageThumb.splice(i, 1);
       break;
     }
   }
-
   var position = data['loved' + data.currentDB].indexOf(currentThumbID);
   data['loved' + data.currentDB].splice(position, 1);
   for (i = 0; i < destination.children.length; i++) {
@@ -204,16 +217,13 @@ function handleBookmark(target) {
   if (data.currentDB === 'Meals') {
     var destination = $bookmarkedMeals;
     var storageThumb = data.bookMealThumbs;
-
   } else {
     destination = $bookmarkedDrinks;
     storageThumb = data.bookDrinkThumbs;
   }
-
   if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
     var targetData = generateStorage(target);
     storageThumb.unshift(targetData);
-
     if (destination.firstElementChild.matches('.full-center')) {
       destination.firstElementChild.remove();
     }
@@ -229,14 +239,12 @@ function handleBookmark(target) {
     }
     return;
   }
-
   for (i = 0; i < storageThumb.length; i++) {
     if (storageThumb[i][0]['id' + page] === currentThumbID) {
       storageThumb.splice(i, 1);
       break;
     }
   }
-
   var position = data['bookmarked' + data.currentDB].indexOf(currentThumbID);
   data['bookmarked' + data.currentDB].splice(position, 1);
   for (i = 0; i < destination.children.length; i++) {
