@@ -23,12 +23,23 @@ var $select = document.querySelector('select');
 var userDisplay = document.querySelector('.user-display');
 
 window.addEventListener('DOMContentLoaded', function (event) {
+  if (data.currentDB === 'Meals') {
+    loadInList(data.bookMealThumbs, $bookmarkedMeals);
+    loadInList(data.lovedMealThumbs, $lovedMeals);
+    data.currentDB = 'Drinks';
+    loadInList(data.bookDrinkThumbs, $bookmarkedDrinks);
+    loadInList(data.lovedDrinkThumbs, $lovedDrinks);
+    data.currentDB = 'Meals';
+  } else {
+    loadInList(data.bookDrinkThumbs, $bookmarkedDrinks);
+    loadInList(data.lovedDrinkThumbs, $lovedDrinks);
+    data.currentDB = 'Meals';
+    loadInList(data.bookMealThumbs, $bookmarkedMeals);
+    loadInList(data.lovedMealThumbs, $lovedMeals);
+    data.currentDB = 'Drinks';
+  }
   toggleDB(data.currentDB);
   viewSwap(data.currentPage);
-  loadInList(data.bookMealThumbs, $bookmarkedMeals);
-  loadInList(data.lovedMealThumbs, $lovedMeals);
-  loadInList(data.bookDrinkThumbs, $bookmarkedDrinks);
-  loadInList(data.lovedDrinkThumbs, $lovedDrinks);
 });
 
 $select.addEventListener('change', function (event) {
