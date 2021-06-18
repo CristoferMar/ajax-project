@@ -6,9 +6,13 @@ var data = {
   searchedMeals: [],
   searchedDrinks: [],
   bookmarkedMeals: [],
+  bookMealThumbs: [],
   lovedMeals: [],
+  lovedMealThumbs: [],
   bookmarkedDrinks: [],
-  lovedDrinks: []
+  bookDrinkThumbs: [],
+  lovedDrinks: [],
+  lovedDrinkThumbs: []
 };
 
 var oldDataJSON = localStorage.getItem('cookItUpData');

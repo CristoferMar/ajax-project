@@ -117,41 +117,79 @@ function viewSwap(location) {
   $select.selectedIndex = 0;
 }
 
-function handleBookmark(target) {
+function generateStorage(target) {
+  var currentThumb = target.closest('.recipe-thumb');
   if (data.currentDB === 'Meals') {
-    var destination = $bookmarkedMeals;
+    var fullData = [{
+      idMeal: currentThumb.closest('.recipe-thumb').getAttribute('id'),
+      strMealThumb: currentThumb.firstElementChild.firstElementChild.getAttribute('src'),
+      strMeal: currentThumb.children[1].firstElementChild.textContent,
+      strArea: currentThumb.children[1].children[1].lastElementChild.textContent,
+      strCategory: currentThumb.children[1].children[2].lastElementChild.textContent
+    }];
   } else {
-    destination = $bookmarkedDrinks;
+    fullData = [{
+      idDrink: currentThumb.closest('.recipe-thumb').getAttribute('id'),
+      strDrinkThumb: currentThumb.firstElementChild.firstElementChild.getAttribute('src'),
+      strDrink: currentThumb.children[1].firstElementChild.textContent,
+      strCategory: currentThumb.children[1].children[1].lastElementChild.textContent,
+      strAlcoholic: currentThumb.children[1].children[2].lastElementChild.textContent
+    }];
   }
-  var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
-  if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+  return fullData;
+}
+
+function handleHeart(target) {
+  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
+  if (data.currentDB === 'Meals') {
+    var destination = $lovedMeals;
+    var storageThumb = data.lovedMealThumbs;
+
+  } else {
+    destination = $lovedDrinks;
+    storageThumb = data.lovedDrinkThumbs;
+  }
+
+  if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
+    var targetData = generateStorage(target);
+    storageThumb.unshift(targetData);
+
     if (destination.firstElementChild.matches('.full-center')) {
       destination.firstElementChild.remove();
     }
-    data['bookmarked' + data.currentDB].push(currentThumb);
+    data['loved' + data.currentDB].push(currentThumbID);
     var clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
     for (var i = 0; i < userDisplay.children.length; i++) {
       for (var j = 0; j < userDisplay.children[i].children.length; j++) {
-        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
-          userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', 'images/Checked_BookMark.svg');
+        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumbID) {
+          userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', 'images/Filled_Heart.svg');
         }
       }
     }
     return;
   }
-  var position = data['bookmarked' + data.currentDB].indexOf(currentThumb);
-  data['bookmarked' + data.currentDB].splice(position, 1);
+
+  for (i = 0; i < storageThumb.length; i++) {
+    if (storageThumb[i][0]['id' + page] === currentThumbID) {
+      storageThumb.splice(i, 1);
+      break;
+    }
+  }
+
+  var position = data['loved' + data.currentDB].indexOf(currentThumbID);
+  data['loved' + data.currentDB].splice(position, 1);
   for (i = 0; i < destination.children.length; i++) {
-    if (destination.children[i].getAttribute('id') === currentThumb) {
+    if (destination.children[i].getAttribute('id') === currentThumbID) {
       destination.children[i].remove();
       break;
     }
   }
   for (i = 0; i < userDisplay.children.length; i++) {
     for (j = 0; j < userDisplay.children[i].children.length; j++) {
-      if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
-        userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', 'images/Empty_Bookmark.svg');
+      if (userDisplay.children[i].children[j].getAttribute('id') === currentThumbID) {
+        userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', 'images/Empty_Heart.svg');
       }
     }
   }
@@ -160,41 +198,57 @@ function handleBookmark(target) {
   }
 }
 
-function handleHeart(target) {
+function handleBookmark(target) {
+  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
-    var destination = $lovedMeals;
+    var destination = $bookmarkedMeals;
+    var storageThumb = data.bookMealThumbs;
+
   } else {
-    destination = $lovedDrinks;
+    destination = $bookmarkedDrinks;
+    storageThumb = data.bookDrinkThumbs;
   }
-  var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
-  if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
+
+  if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+    var targetData = generateStorage(target);
+    storageThumb.unshift(targetData);
+
     if (destination.firstElementChild.matches('.full-center')) {
       destination.firstElementChild.remove();
     }
-    data['loved' + data.currentDB].push(currentThumb);
+    data['bookmarked' + data.currentDB].push(currentThumbID);
     var clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
     for (var i = 0; i < userDisplay.children.length; i++) {
       for (var j = 0; j < userDisplay.children[i].children.length; j++) {
-        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
-          userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', 'images/Filled_Heart.svg');
+        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumbID) {
+          userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', 'images/Checked_BookMark.svg');
         }
       }
     }
     return;
   }
-  var position = data['loved' + data.currentDB].indexOf(currentThumb);
-  data['loved' + data.currentDB].splice(position, 1);
+
+  for (i = 0; i < storageThumb.length; i++) {
+    if (storageThumb[i][0]['id' + page] === currentThumbID) {
+      storageThumb.splice(i, 1);
+      break;
+    }
+  }
+
+  var position = data['bookmarked' + data.currentDB].indexOf(currentThumbID);
+  data['bookmarked' + data.currentDB].splice(position, 1);
   for (i = 0; i < destination.children.length; i++) {
-    if (destination.children[i].getAttribute('id') === currentThumb) {
+    if (destination.children[i].getAttribute('id') === currentThumbID) {
       destination.children[i].remove();
       break;
     }
   }
   for (i = 0; i < userDisplay.children.length; i++) {
     for (j = 0; j < userDisplay.children[i].children.length; j++) {
-      if (userDisplay.children[i].children[j].getAttribute('id') === currentThumb) {
-        userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', 'images/Empty_Heart.svg');
+      if (userDisplay.children[i].children[j].getAttribute('id') === currentThumbID) {
+        userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', 'images/Empty_Bookmark.svg');
       }
     }
   }
@@ -213,7 +267,7 @@ function nothingSaved(location) {
   none.className = 'full-center';
   var $h4 = document.createElement('h4');
   $h4.className = page + ' full-center';
-  $h4.textContent = 'You have nothing stored in this page. Try Bookmarking or Liking some recipes.';
+  $h4.textContent = 'You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.';
   none.append($h4);
   return none;
 }
@@ -247,6 +301,7 @@ function responseGET(neededFunction, callTail) {
 function postSearch() {
   if (data['searched' + data.currentDB].length === 0) {
     gallery.append(noResults());
+    return;
   }
 
   for (var i = data['searched' + data.currentDB].length - 1; i > 0; i--) {
@@ -372,7 +427,7 @@ function toggleDB(currentDB) {
     }
     $pageTitle.className = $pageTitle.className.replace('drinks', 'meals');
     $toggleBtn.classList.replace('green', 'purple');
-    $toggleBtn.textContent = 'Drink';
+    $toggleBtn.textContent = 'Drinks';
     $searchImg.setAttribute('src', 'images/Spy_Glass.svg');
   }
   $select.selectedIndex = 0;
