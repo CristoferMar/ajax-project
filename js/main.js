@@ -370,14 +370,14 @@ function generateThumb(response) {
   var $rightbtns = document.createElement('div');
   $rightbtns.className = 'right-bookmark';
   var $bookmarkBtn = document.createElement('button');
-  $bookmarkBtn.className = 'bookmark-trigger seamless-btn';
+  $bookmarkBtn.className = 'click bookmark-trigger seamless-btn';
   var $bookmark = document.createElement('img');
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
   $bookmark.className = 'full-center bookmark';
   $bookmarkBtn.append($bookmark);
   var $lovedBtn = document.createElement('button');
-  $lovedBtn.className = 'loved-trigger seamless-btn';
+  $lovedBtn.className = 'click loved-trigger seamless-btn';
   var $loved = document.createElement('img');
   $loved.className = 'full-center loved';
   $loved.setAttribute('src', heart);
