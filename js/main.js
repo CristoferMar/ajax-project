@@ -167,16 +167,17 @@ function generateStorage(target) {
   return fullData;
 }
 
-function handleHeart(target) {
-  function updateHearIcon(newImgURL) {
-    for (var i = 0; i < userDisplay.children.length; i++) {
-      for (var j = 0; j < userDisplay.children[i].children.length; j++) {
-        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumbID) {
-          userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', newImgURL);
-        }
+function updateHeartIcon(newImgURL, thumbID) {
+  for (var i = 0; i < userDisplay.children.length; i++) {
+    for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+      if (userDisplay.children[i].children[j].getAttribute('id') === thumbID) {
+        userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', newImgURL);
       }
     }
   }
+}
+
+function handleHeart(target) {
   var page = data.currentDB.substring(0, data.currentDB.length - 1);
   var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
@@ -196,7 +197,7 @@ function handleHeart(target) {
     data['loved' + data.currentDB].push(currentThumbID);
     var clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
-    updateHearIcon('images/Filled_Heart.svg');
+    updateHeartIcon('images/Filled_Heart.svg', currentThumbID);
     return;
   }
   for (var i = 0; i < storageThumb.length; i++) {
@@ -213,22 +214,23 @@ function handleHeart(target) {
       break;
     }
   }
-  updateHearIcon('images/Empty_Heart.svg');
+  updateHeartIcon('images/Empty_Heart.svg', currentThumbID);
   if (destination.children.length === 0) {
     destination.append(nothingSaved(destination));
   }
 }
 
-function handleBookmark(target) {
-  function updateBookIcon(newImgURL) {
-    for (var i = 0; i < userDisplay.children.length; i++) {
-      for (var j = 0; j < userDisplay.children[i].children.length; j++) {
-        if (userDisplay.children[i].children[j].getAttribute('id') === currentThumbID) {
-          userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', newImgURL);
-        }
+function updateBookIcon(newImgURL, thumbID) {
+  for (var i = 0; i < userDisplay.children.length; i++) {
+    for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+      if (userDisplay.children[i].children[j].getAttribute('id') === thumbID) {
+        userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', newImgURL);
       }
     }
   }
+}
+
+function handleBookmark(target) {
   var page = data.currentDB.substring(0, data.currentDB.length - 1);
   var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
@@ -247,7 +249,7 @@ function handleBookmark(target) {
     data['bookmarked' + data.currentDB].push(currentThumbID);
     var clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
-    updateBookIcon('images/Checked_BookMark.svg');
+    updateBookIcon('images/Checked_BookMark.svg', currentThumbID);
     return;
   }
   for (var i = 0; i < storageThumb.length; i++) {
@@ -264,7 +266,7 @@ function handleBookmark(target) {
       break;
     }
   }
-  updateBookIcon('images/Empty_Bookmark.svg');
+  updateBookIcon('images/Empty_Bookmark.svg', currentThumbID);
   if (destination.children.length === 0) {
     destination.append(nothingSaved(destination));
   }
@@ -409,27 +411,16 @@ function clearGallery() {
   }
 }
 
+function editNavBtns(oldValue, newValue) {
+  for (var i = 0; i < $navSwappers.length; i++) {
+    $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace(oldValue, newValue));
+    if ($navSwappers[i].nodeName === 'OPTION') {
+      $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace(oldValue, newValue));
+    }
+  }
+}
+
 function toggleDB(currentDB) {
-  function editNavBtns(oldValue, newValue) {
-    for (var i = 0; i < $navSwappers.length; i++) {
-      $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace(oldValue, newValue));
-      if ($navSwappers[i].nodeName === 'OPTION') {
-        $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace(oldValue, newValue));
-      }
-    }
-  }
-  function toggleTouchUp(oldlcDB, newlcDB, oldColor, newColor, newUcDB, imgURL) {
-    $pageTitle.className = $pageTitle.className.replace(oldlcDB, newlcDB);
-    $toggleBtn.classList.replace(oldColor, newColor);
-    $toggleBtn.textContent = newUcDB;
-    $searchImg.setAttribute('src', imgURL);
-  }
-  function toggleColors(oldColor, newColor, oldBorder, newBorder) {
-    for (var i = 0; i < $uniformColor.length; i++) {
-      $uniformColor[i].classList.replace(oldColor, newColor);
-      $searchBar.children[i].classList.replace(oldBorder, newBorder);
-    }
-  }
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
     editNavBtns('Meals', 'Drinks');
@@ -442,6 +433,20 @@ function toggleDB(currentDB) {
     toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
   }
   $select.selectedIndex = 0;
+}
+
+function toggleTouchUp(oldlcDB, newlcDB, oldColor, newColor, newUcDB, imgURL) {
+  $pageTitle.className = $pageTitle.className.replace(oldlcDB, newlcDB);
+  $toggleBtn.classList.replace(oldColor, newColor);
+  $toggleBtn.textContent = newUcDB;
+  $searchImg.setAttribute('src', imgURL);
+}
+
+function toggleColors(oldColor, newColor, oldBorder, newBorder) {
+  for (var i = 0; i < $uniformColor.length; i++) {
+    $uniformColor[i].classList.replace(oldColor, newColor);
+    $searchBar.children[i].classList.replace(oldBorder, newBorder);
+  }
 }
 
 function noResults() {
