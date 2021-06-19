@@ -3,6 +3,11 @@
 
 var $toggleBtn = document.querySelector('#toggle-Page');
 var gallery = document.querySelector('#recipe-gallery');
+var $lovedMeals = document.querySelector('#lovedMeals');
+var $bookmarkedMeals = document.querySelector('#bookmarkedMeals');
+var $lovedDrinks = document.querySelector('#lovedDrinks');
+var $bookmarkedDrinks = document.querySelector('#bookmarkedDrinks');
+
 var $navBar = document.querySelector('.nav-container');
 var $uniformColor = document.querySelectorAll('.green');
 var $body = document.querySelector('body');
@@ -10,8 +15,36 @@ var $searchBar = document.querySelector('.search-form');
 var searchCount = 0;
 var $searchImg = document.querySelector('.spy');
 var $start = document.querySelector('#start-page');
-var $pageHeader = document.querySelector('#page-header');
+var $pageTitle = document.querySelector('#title');
 $start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
+var $navSwappers = document.querySelectorAll('.nav-direct');
+var allViews = document.querySelectorAll('.view');
+var $select = document.querySelector('select');
+var userDisplay = document.querySelector('.user-display');
+
+window.addEventListener('DOMContentLoaded', function (event) {
+  if (data.currentDB === 'Meals') {
+    loadInList(data.bookMealThumbs, $bookmarkedMeals);
+    loadInList(data.lovedMealThumbs, $lovedMeals);
+    data.currentDB = 'Drinks';
+    loadInList(data.bookDrinkThumbs, $bookmarkedDrinks);
+    loadInList(data.lovedDrinkThumbs, $lovedDrinks);
+    data.currentDB = 'Meals';
+  } else {
+    loadInList(data.bookDrinkThumbs, $bookmarkedDrinks);
+    loadInList(data.lovedDrinkThumbs, $lovedDrinks);
+    data.currentDB = 'Meals';
+    loadInList(data.bookMealThumbs, $bookmarkedMeals);
+    loadInList(data.lovedMealThumbs, $lovedMeals);
+    data.currentDB = 'Drinks';
+  }
+  toggleDB(data.currentDB);
+  viewSwap(data.currentPage);
+});
+
+$select.addEventListener('change', function (event) {
+  viewSwap(event.target.value);
+});
 
 $navBar.addEventListener('click', function (event) {
   event.preventDefault();
@@ -27,6 +60,7 @@ $navBar.addEventListener('click', function (event) {
   }
 
   if (event.target.matches('.randomize')) {
+    viewSwap('searched');
     clearGallery();
     data['searched' + data.currentDB] = [];
     searchCount = 6;
@@ -34,6 +68,10 @@ $navBar.addEventListener('click', function (event) {
     for (var i = 0; i < 6; i++) {
       responseGET(getRecipeIDs, 'random.php');
     }
+  }
+
+  if (event.target.matches('.swap')) {
+    viewSwap(event.target.getAttribute('data-view'));
   }
 
 });
@@ -59,7 +97,7 @@ $searchBar.addEventListener('submit', function (event) {
   responseGET(getRecipeIDs, 'filter.php?c=' + searched); // category
 });
 
-gallery.addEventListener('click', function (event) {
+userDisplay.addEventListener('click', function (event) {
   if (event.target.matches('.bookmark')) {
     handleBookmark(event.target);
   }
@@ -69,28 +107,184 @@ gallery.addEventListener('click', function (event) {
 
 });
 
-function handleBookmark(target) {
-  var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
-  if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
-    target.setAttribute('src', 'images/Checked_BookMark.svg');
-    data['bookmarked' + data.currentDB].push(currentThumb);
+function loadInList(pullFrom, appendTo) {
+  if (pullFrom.length === 0) {
     return;
+  } else {
+    if (appendTo.firstElementChild.matches('.full-center')) {
+      appendTo.firstElementChild.remove();
+    }
   }
-  target.setAttribute('src', 'images/Empty_Bookmark.svg');
-  var position = data['bookmarked' + data.currentDB].indexOf(currentThumb);
-  data['bookmarked' + data.currentDB].splice(position, 1);
+  for (var i = 0; i < pullFrom.length; i++) {
+    appendTo.append(generateThumb(pullFrom[i]));
+  }
+}
+
+function viewSwap(location) {
+  data.currentPage = location;
+  for (var i = 0; i < allViews.length; i++) {
+    if (allViews[i].getAttribute('data-view') !== location) {
+      if (!allViews[i].matches('.hidden')) {
+        allViews[i].className = allViews[i].className.replace('view', 'view hidden');
+      }
+    } else {
+      allViews[i].className = allViews[i].className.replace('view hidden', 'view');
+    }
+  }
+
+  if (location !== 'searched') {
+    $pageTitle.className = $pageTitle.className.replace('view hidden', 'view');
+    if (location.match('bookmarked') !== null) {
+      $pageTitle.firstElementChild.textContent = 'My Bookmarks';
+    } else if (location.match('loved') !== null) {
+      $pageTitle.firstElementChild.textContent = 'My Favorites';
+    } else if (location.match('fullRecipe') !== null) {
+      $pageTitle.firstElementChild.textContent = 'This will be the name of the recipe';
+    }
+  }
+  $select.selectedIndex = 0;
+}
+
+function generateStorage(target) {
+  var currentThumb = target.closest('.recipe-thumb');
+  if (data.currentDB === 'Meals') {
+    var fullData = [{
+      idMeal: currentThumb.closest('.recipe-thumb').getAttribute('id'),
+      strMealThumb: currentThumb.firstElementChild.firstElementChild.getAttribute('src'),
+      strMeal: currentThumb.children[1].firstElementChild.textContent,
+      strArea: currentThumb.children[1].children[1].lastElementChild.textContent,
+      strCategory: currentThumb.children[1].children[2].lastElementChild.textContent
+    }];
+  } else {
+    fullData = [{
+      idDrink: currentThumb.closest('.recipe-thumb').getAttribute('id'),
+      strDrinkThumb: currentThumb.firstElementChild.firstElementChild.getAttribute('src'),
+      strDrink: currentThumb.children[1].firstElementChild.textContent,
+      strCategory: currentThumb.children[1].children[1].lastElementChild.textContent,
+      strAlcoholic: currentThumb.children[1].children[2].lastElementChild.textContent
+    }];
+  }
+  return fullData;
+}
+
+function updateHeartIcon(newImgURL, thumbID) {
+  for (var i = 0; i < userDisplay.children.length; i++) {
+    for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+      if (userDisplay.children[i].children[j].getAttribute('id') === thumbID) {
+        userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', newImgURL);
+      }
+    }
+  }
 }
 
 function handleHeart(target) {
-  var currentThumb = target.closest('.recipe-thumb').getAttribute('id');
+  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
+  if (data.currentDB === 'Meals') {
+    var destination = $lovedMeals;
+    var storageThumb = data.lovedMealThumbs;
+  } else {
+    destination = $lovedDrinks;
+    storageThumb = data.lovedDrinkThumbs;
+  }
   if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
-    target.setAttribute('src', 'images/Filled_Heart.svg');
-    data['loved' + data.currentDB].push(currentThumb);
+    var targetData = generateStorage(target);
+    storageThumb.unshift(targetData);
+
+    if (destination.firstElementChild.matches('.full-center')) {
+      destination.firstElementChild.remove();
+    }
+    data['loved' + data.currentDB].push(currentThumbID);
+    var clone = target.closest('.recipe-thumb').cloneNode(true);
+    destination.prepend(clone);
+    updateHeartIcon('images/Filled_Heart.svg', currentThumbID);
     return;
   }
-  target.setAttribute('src', 'images/Empty_Heart.svg');
-  var position = data['loved' + data.currentDB].indexOf(currentThumb);
+  for (var i = 0; i < storageThumb.length; i++) {
+    if (storageThumb[i][0]['id' + page] === currentThumbID) {
+      storageThumb.splice(i, 1);
+      break;
+    }
+  }
+  var position = data['loved' + data.currentDB].indexOf(currentThumbID);
   data['loved' + data.currentDB].splice(position, 1);
+  for (i = 0; i < destination.children.length; i++) {
+    if (destination.children[i].getAttribute('id') === currentThumbID) {
+      destination.children[i].remove();
+      break;
+    }
+  }
+  updateHeartIcon('images/Empty_Heart.svg', currentThumbID);
+  if (destination.children.length === 0) {
+    destination.append(nothingSaved(destination));
+  }
+}
+
+function updateBookIcon(newImgURL, thumbID) {
+  for (var i = 0; i < userDisplay.children.length; i++) {
+    for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+      if (userDisplay.children[i].children[j].getAttribute('id') === thumbID) {
+        userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', newImgURL);
+      }
+    }
+  }
+}
+
+function handleBookmark(target) {
+  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
+  if (data.currentDB === 'Meals') {
+    var destination = $bookmarkedMeals;
+    var storageThumb = data.bookMealThumbs;
+  } else {
+    destination = $bookmarkedDrinks;
+    storageThumb = data.bookDrinkThumbs;
+  }
+  if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+    var targetData = generateStorage(target);
+    storageThumb.unshift(targetData);
+    if (destination.firstElementChild.matches('.full-center')) {
+      destination.firstElementChild.remove();
+    }
+    data['bookmarked' + data.currentDB].push(currentThumbID);
+    var clone = target.closest('.recipe-thumb').cloneNode(true);
+    destination.prepend(clone);
+    updateBookIcon('images/Checked_BookMark.svg', currentThumbID);
+    return;
+  }
+  for (var i = 0; i < storageThumb.length; i++) {
+    if (storageThumb[i][0]['id' + page] === currentThumbID) {
+      storageThumb.splice(i, 1);
+      break;
+    }
+  }
+  var position = data['bookmarked' + data.currentDB].indexOf(currentThumbID);
+  data['bookmarked' + data.currentDB].splice(position, 1);
+  for (i = 0; i < destination.children.length; i++) {
+    if (destination.children[i].getAttribute('id') === currentThumbID) {
+      destination.children[i].remove();
+      break;
+    }
+  }
+  updateBookIcon('images/Empty_Bookmark.svg', currentThumbID);
+  if (destination.children.length === 0) {
+    destination.append(nothingSaved(destination));
+  }
+}
+
+function nothingSaved(location) {
+  if (location.getAttribute('id').includes('Meals')) {
+    var page = 'meals';
+  } else {
+    page = 'drinks';
+  }
+  var none = document.createElement('div');
+  none.className = 'full-center';
+  var $h4 = document.createElement('h4');
+  $h4.className = page + ' full-center';
+  $h4.textContent = 'You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.';
+  none.append($h4);
+  return none;
 }
 
 function responseGET(neededFunction, callTail) {
@@ -122,6 +316,7 @@ function responseGET(neededFunction, callTail) {
 function postSearch() {
   if (data['searched' + data.currentDB].length === 0) {
     gallery.append(noResults());
+    return;
   }
 
   for (var i = data['searched' + data.currentDB].length - 1; i > 0; i--) {
@@ -145,7 +340,7 @@ function generateThumb(response) {
 
   var $recipeThumb = document.createElement('div');
   $recipeThumb.className = 'to-DOM swap recipe-thumb ' + page.toLowerCase() + '-border';
-  $recipeThumb.setAttribute('data-view', data.currentPage + data.currentDB);
+  $recipeThumb.setAttribute('data-view', 'fullRecipe');
   $recipeThumb.setAttribute('id', recipeObject['id' + page]);
 
   var $leftImg = document.createElement('div');
@@ -182,14 +377,14 @@ function generateThumb(response) {
   var $rightbtns = document.createElement('div');
   $rightbtns.className = 'right-bookmark';
   var $bookmarkBtn = document.createElement('button');
-  $bookmarkBtn.className = 'bookmark-trigger seamless-btn';
+  $bookmarkBtn.className = 'click bookmark-trigger seamless-btn';
   var $bookmark = document.createElement('img');
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
   $bookmark.className = 'full-center bookmark';
   $bookmarkBtn.append($bookmark);
   var $lovedBtn = document.createElement('button');
-  $lovedBtn.className = 'loved-trigger seamless-btn';
+  $lovedBtn.className = 'click loved-trigger seamless-btn';
   var $loved = document.createElement('img');
   $loved.className = 'full-center loved';
   $loved.setAttribute('src', heart);
@@ -216,27 +411,42 @@ function clearGallery() {
   }
 }
 
+function editNavBtns(oldValue, newValue) {
+  for (var i = 0; i < $navSwappers.length; i++) {
+    $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace(oldValue, newValue));
+    if ($navSwappers[i].nodeName === 'OPTION') {
+      $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace(oldValue, newValue));
+    }
+  }
+}
+
 function toggleDB(currentDB) {
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
-    for (var i = 0; i < $uniformColor.length; i++) {
-      $uniformColor[i].classList.replace('green', 'purple');
-      $searchBar.children[i].classList.replace('meal-search', 'drink-search');
-    }
-    $toggleBtn.classList.replace('purple', 'green');
-    $toggleBtn.textContent = 'Meals';
-    $searchImg.setAttribute('src', 'images/Spy_Glass_White.svg');
+    editNavBtns('Meals', 'Drinks');
+    toggleColors('green', 'purple', 'meal-search', 'drink-search');
+    toggleTouchUp('meals', 'drinks', 'purple', 'green', 'Meals', 'images/Spy_Glass_White.svg');
   } else {
     $body.classList.replace('drink-background', 'meal-background');
-    for (i = 0; i < $uniformColor.length; i++) {
-      $uniformColor[i].classList.replace('purple', 'green');
-      $searchBar.children[i].classList.replace('drink-search', 'meal-search');
-    }
-    $toggleBtn.classList.replace('green', 'purple');
-    $toggleBtn.textContent = 'Drink';
-    $searchImg.setAttribute('src', 'images/Spy_Glass.svg');
+    editNavBtns('Drinks', 'Meals');
+    toggleColors('purple', 'green', 'drink-search', 'meal-search');
+    toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
   }
-  $pageHeader.className = currentDB.toLowerCase();
+  $select.selectedIndex = 0;
+}
+
+function toggleTouchUp(oldlcDB, newlcDB, oldColor, newColor, newUcDB, imgURL) {
+  $pageTitle.className = $pageTitle.className.replace(oldlcDB, newlcDB);
+  $toggleBtn.classList.replace(oldColor, newColor);
+  $toggleBtn.textContent = newUcDB;
+  $searchImg.setAttribute('src', imgURL);
+}
+
+function toggleColors(oldColor, newColor, oldBorder, newBorder) {
+  for (var i = 0; i < $uniformColor.length; i++) {
+    $uniformColor[i].classList.replace(oldColor, newColor);
+    $searchBar.children[i].classList.replace(oldBorder, newBorder);
+  }
 }
 
 function noResults() {
@@ -258,5 +468,3 @@ function noResults() {
   none.append($thumb);
   return none;
 }
-
-toggleDB(data.currentDB);

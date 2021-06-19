@@ -16,51 +16,71 @@
     <div class="nav-container green">
       <div class="row space-between">
         <div class="left-nav">
-          <button data-view="searched" class="swap click seamless-btn color-white"><h1>Home</h1></button>
+          <button class="swap click seamless-btn color-white"><h1 data-view="searched" class="swap">Home</h1></button>
           <select class="expand click green" name="MyLists">
             <option disabled selected hidden>My Lists</option>
-            <option class="swap" data-view="bookmarks">Bookmarked</option>
-            <option class="swap" data-view="loved">Loved</option>
+            <option class="swap nav-direct" value="bookmarkedMeals" data-view="bookmarkedMeals">Bookmarked</option>
+            <option class="swap nav-direct" value="lovedMeals" data-view="lovedMeals">Loved</option>
           </select>
           <div class="colapse">
-            <a href="" class="swap click" data-view="bookmarks">Bookmarked</a>
-            <a href="" class="swap click" data-view="loved">Loved</a>
+            <a href="" class="swap click nav-direct" data-view="bookmarkedMeals">Bookmarked</a>
+            <a href="" class="swap click nav-direct" data-view="lovedMeals">Loved</a>
           </div>
         </div>
         <div class="right-nav">
-          <button class="swap click randomize seamless-btn" data-view="searched"><img src="images/mysteryBox.svg" class="randomize" alt="Mystery Box"></button>
-          <button id="toggle-Page" class="click large-btn purple">Drinks</button>
+          <button class="click randomize seamless-btn"><img src="images/mysteryBox.svg" class="randomize" alt="Mystery Box"></button>
+          <button id="toggle-Page" class="swap click large-btn purple" data-view="searched">Drinks</button>
         </div>
       </div>
     </div>
   </header>
   <main>
 
-    <div class="row hidden" data-view="searched">
-      <h1 id="page-header" class="meals">My Bookmarks</h1>
+    <div class="row view meals" data-view="title" id="title">
+      <h1 id="page-header">My Bookmarks</h1>
     </div>
-    <div class="row" data-view="searched">
+    <div class="row view hidden" data-view="searched">
       <form class="search-form flex justify-center">
         <input class="search-bar meal-search" type="text" name="search" placeholder="Search">
         <button class="click search-btn meal-search"><img class="spy" src="images/Spy_Glass.svg" alt="search"></button>
       </form>
     </div>
 
+    <div class="user-display">
 
-    <div class="row space-between" id="recipe-gallery">
+      <div class="row wrap space-between view" id="recipe-gallery" data-view="searched">
+        <div id="start-page">
+          <div class="thumb-padding">
+            <h5>The top right button toggles between Drinks or Meals.</h5>
+            <h5>Find Meals or Drinks by Name or Main Ingredient.</h5>
+            <h5>Find Meals from many Nationalities.</h5>
+            <h5>Search Drinks by Alcoholic or Non Alcoholic.</h5>
+          </div>
+        </div>
+      </div>
 
-      <div id="start-page" class="hidden">
-        <div class="thumb-padding">
-          <h5>The top right button toggles between Drinks or Meals.</h5>
-          <h5>Find Meals or Drinks by Name or Main Ingredient.</h5>
-          <h5>Find Meals from many Nationalities.</h5>
-          <h5>Search Drinks by Alcoholic or Non Alcoholic.</h5>
+      <div class="row wrap space-between view hidden" id="lovedMeals" data-view="lovedMeals">
+        <div class="full-center">
+          <h4 class="meals full-center">You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.</h4>
+        </div>
+      </div>
+      <div class="row wrap space-between view hidden" id="bookmarkedMeals" data-view="bookmarkedMeals">
+        <div class="full-center">
+          <h4 class="meals full-center">You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.</h4>
+        </div>
+      </div>
+      <div class="row wrap space-between view hidden" id="lovedDrinks" data-view="lovedDrinks">
+        <div class="full-center">
+          <h4 class="drinks full-center">You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.</h4>
+        </div>
+      </div>
+      <div class="row wrap space-between view hidden" id="bookmarkedDrinks" data-view="bookmarkedDrinks">
+        <div class="full-center">
+          <h4 class="drinks full-center">You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.</h4>
         </div>
       </div>
 
     </div>
-
-
   </main>
   <script src="js/data.js"></script>
   <script src="js/main.js"></script>
