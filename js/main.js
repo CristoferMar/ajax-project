@@ -100,9 +100,12 @@ $searchBar.addEventListener('submit', function (event) {
 userDisplay.addEventListener('click', function (event) {
   if (event.target.matches('.bookmark')) {
     handleBookmark(event.target);
-  }
-  if (event.target.matches('.loved')) {
+  } else if (event.target.matches('.loved')) {
     handleHeart(event.target);
+  } else if (event.target.closest('.recipe-thumb') !== null) {
+    // GET the recipe by ID, and add it to data.currentRecipe
+    // update recipe page with info from data.currentRecipe
+    viewSwap('fullRecipe');
   }
 
 });
@@ -139,7 +142,7 @@ function viewSwap(location) {
     } else if (location.match('loved') !== null) {
       $pageTitle.firstElementChild.textContent = 'My Favorites';
     } else if (location.match('fullRecipe') !== null) {
-      $pageTitle.firstElementChild.textContent = 'This will be the name of the recipe';
+      $pageTitle.firstElementChild.textContent = 'Recipe:';
     }
   }
   $select.selectedIndex = 0;
@@ -411,15 +414,6 @@ function clearGallery() {
   }
 }
 
-function editNavBtns(oldValue, newValue) {
-  for (var i = 0; i < $navSwappers.length; i++) {
-    $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace(oldValue, newValue));
-    if ($navSwappers[i].nodeName === 'OPTION') {
-      $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace(oldValue, newValue));
-    }
-  }
-}
-
 function toggleDB(currentDB) {
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
@@ -433,6 +427,15 @@ function toggleDB(currentDB) {
     toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
   }
   $select.selectedIndex = 0;
+}
+
+function editNavBtns(oldValue, newValue) {
+  for (var i = 0; i < $navSwappers.length; i++) {
+    $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace(oldValue, newValue));
+    if ($navSwappers[i].nodeName === 'OPTION') {
+      $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace(oldValue, newValue));
+    }
+  }
 }
 
 function toggleTouchUp(oldlcDB, newlcDB, oldColor, newColor, newUcDB, imgURL) {
