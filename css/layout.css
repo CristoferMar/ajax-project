@@ -45,6 +45,10 @@
   min-height: 64px;
 }
 
+.half-sml {
+  width: 100%;
+}
+
 @media only screen and (min-width: 650px) {
   .row {
     max-width: 900px;
@@ -80,6 +84,10 @@
 
   .thumb-padding {
     padding: 1.5rem 0;
+  }
+
+  .half-sml {
+    width: 40%;
   }
 }
 
