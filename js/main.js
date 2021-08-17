@@ -22,6 +22,11 @@ var allViews = document.querySelectorAll('.view');
 var $select = document.querySelector('select');
 var userDisplay = document.querySelector('.user-display');
 
+var recipeImg = document.querySelector('#recipe-img');
+var recipeInfo = document.querySelector('#recipe-info');
+var ingredients = document.querySelector('#ingredients');
+var instructions = document.querySelector('#instructions');
+
 window.addEventListener('DOMContentLoaded', function (event) {
   if (data.currentDB === 'Meals') {
     loadInList(data.bookMealThumbs, $bookmarkedMeals);
@@ -105,7 +110,10 @@ userDisplay.addEventListener('click', function (event) {
   } else if (event.target.closest('.recipe-thumb') !== null) {
     // GET the recipe by ID, and add it to data.currentRecipe
     // update recipe page with info from data.currentRecipe
+    clearPrevoiousRecipe();
     viewSwap('fullRecipe');
+    console.log(event.target.closest('.recipe-thumb').getAttribute('id'));
+    getRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
   }
 
 });
@@ -426,7 +434,7 @@ function toggleDB(currentDB) {
     toggleColors('purple', 'green', 'drink-search', 'meal-search');
     toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
   }
-  $select.selectedIndex = 0;
+  // $select.selectedIndex = 0;
 }
 
 function editNavBtns(oldValue, newValue) {
@@ -471,3 +479,18 @@ function noResults() {
   none.append($thumb);
   return none;
 }
+
+function clearPrevoiousRecipe() {
+  recipeImg.setAttribute('src', 'https://cdn.dribbble.com/users/2140642/screenshots/4301537/rodrigosloader.gif');
+  while (recipeInfo.firstChild) {
+    recipeInfo.removeChild(recipeInfo.firstChild);
+  }
+  while (ingredients.firstChild) {
+    ingredients.removeChild(ingredients.firstChild);
+  }
+  instructions.textContent = '';
+}
+
+const getRecipe = id => {
+  console.log(id);
+};

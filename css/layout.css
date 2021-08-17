@@ -49,6 +49,10 @@
   width: 100%;
 }
 
+.width-50-100 {
+  width: 100%;
+}
+
 @media only screen and (min-width: 650px) {
   .row {
     max-width: 900px;
@@ -88,6 +92,11 @@
 
   .half-sml {
     width: 40%;
+  }
+
+  .width-50-100 {
+    width: 50%;
+    text-align: center;
   }
 }
 

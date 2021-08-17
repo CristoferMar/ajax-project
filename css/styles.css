@@ -48,7 +48,7 @@ a {
 }
 
 p {
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   font-weight: 500;
 }
 
@@ -215,6 +215,10 @@ i {
   text-align: center;
 }
 
+.full-width {
+  width: 100%;
+}
+
 .bookmark-trigger,
 .loved-trigger {
   max-width: 22px;
@@ -226,4 +230,41 @@ i {
 
 .space-evenly {
   justify-content: space-around;
+}
+
+.padding-20 {
+  padding: 20px;
+}
+
+.youtube-link {
+  text-decoration: none;
+  color: #08891c;
+}
+
+.marg-btm-1rem {
+  margin-bottom: 1rem;
+}
+
+.font-wt-400 {
+  font-weight: 400;
+}
+
+.height-100 {
+  max-height: 100%;
+}
+
+.font-up-rem {
+  font-size: 1.1rem;
+}
+
+.column {
+  flex-direction: column;
+}
+
+.padding-horiz-20 {
+  padding: 0 20px;
+}
+
+.pre-line {
+  white-space: pre-line;
 }
