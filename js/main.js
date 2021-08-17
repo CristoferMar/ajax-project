@@ -26,6 +26,7 @@ var recipeImg = document.querySelector('#recipe-img');
 var recipeInfo = document.querySelector('#recipe-info');
 var ingredients = document.querySelector('#ingredients');
 var instructions = document.querySelector('#instructions');
+var allRecipeBubbles = document.querySelectorAll('.recipe-bubbles');
 
 window.addEventListener('DOMContentLoaded', function (event) {
   if (data.currentDB === 'Meals') {
@@ -113,7 +114,7 @@ userDisplay.addEventListener('click', function (event) {
     clearPrevoiousRecipe();
     viewSwap('fullRecipe');
     console.log(event.target.closest('.recipe-thumb').getAttribute('id'));
-    getRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
+    // getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
   }
 
 });
@@ -428,13 +429,21 @@ function toggleDB(currentDB) {
     editNavBtns('Meals', 'Drinks');
     toggleColors('green', 'purple', 'meal-search', 'drink-search');
     toggleTouchUp('meals', 'drinks', 'purple', 'green', 'Meals', 'images/Spy_Glass_White.svg');
+    toggleRecipePage('meal-border', 'drink-border');
   } else {
     $body.classList.replace('drink-background', 'meal-background');
     editNavBtns('Drinks', 'Meals');
     toggleColors('purple', 'green', 'drink-search', 'meal-search');
     toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
+    toggleRecipePage('drink-border', 'meal-border');
   }
   // $select.selectedIndex = 0;
+}
+
+function toggleRecipePage(oldPageBorders, newPageBorders) {
+  allRecipeBubbles.forEach(node => {
+    node.classList.replace(oldPageBorders, newPageBorders);
+  });
 }
 
 function editNavBtns(oldValue, newValue) {
@@ -489,8 +498,26 @@ function clearPrevoiousRecipe() {
     ingredients.removeChild(ingredients.firstChild);
   }
   instructions.textContent = '';
+
+  // allRecipeBubbles.forEach();
 }
 
-const getRecipe = id => {
-  console.log(id);
-};
+// const getWholeRecipe = id => {
+//   console.log(id);
+//   var xhr = new XMLHttpRequest();
+//   xhr.open('GET', 'https://www.themealdb.com/api/json/v1/1/random.php');
+//   xhr.responseType = 'json';
+//   xhr.addEventListener('load', function () {
+//     console.log(xhr.status);
+//     $list = xhr.response;
+//     console.log('list:', $list);
+//     // generateThumb($list)
+//     console.log('Meal', xhr.response.meals[0]);
+//     var mealInfo = xhr.response.meals[0];
+//     console.log(mealInfo);
+//     getIngredients(mealInfo);
+//     getInstructions(mealInfo);
+
+//   });
+//   xhr.send();
+// };
