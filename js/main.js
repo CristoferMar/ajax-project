@@ -114,7 +114,7 @@ userDisplay.addEventListener('click', function (event) {
     clearPrevoiousRecipe();
     viewSwap('fullRecipe');
     console.log(event.target.closest('.recipe-thumb').getAttribute('id'));
-    // getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
+    getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
   }
 
 });
@@ -498,26 +498,42 @@ function clearPrevoiousRecipe() {
     ingredients.removeChild(ingredients.firstChild);
   }
   instructions.textContent = '';
-
-  // allRecipeBubbles.forEach();
 }
 
-// const getWholeRecipe = id => {
-//   console.log(id);
-//   var xhr = new XMLHttpRequest();
-//   xhr.open('GET', 'https://www.themealdb.com/api/json/v1/1/random.php');
-//   xhr.responseType = 'json';
-//   xhr.addEventListener('load', function () {
-//     console.log(xhr.status);
-//     $list = xhr.response;
-//     console.log('list:', $list);
-//     // generateThumb($list)
-//     console.log('Meal', xhr.response.meals[0]);
-//     var mealInfo = xhr.response.meals[0];
-//     console.log(mealInfo);
-//     getIngredients(mealInfo);
-//     getInstructions(mealInfo);
+const getWholeRecipe = id => {
+  let URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+  let propInResponse = 'meals';
+  if (data.currentDB === 'Drinks') {
+    URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+    propInResponse = 'drinks';
+  }
+  console.log(id);
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', URL);
+  xhr.responseType = 'json';
+  xhr.addEventListener('load', function () {
+    console.log(xhr.status);
+    data.currentRecipe = xhr.response[propInResponse][0];
+    console.log('data.currentRecipe:', data.currentRecipe);
+    // generateThumb($list)
+    console.log('Meal', xhr.response);
+    // var mealInfo = xhr.response.meals[0];
+    getIngredients(data.currentRecipe);
+    // getInstructions(mealInfo);
 
-//   });
-//   xhr.send();
-// };
+  });
+  xhr.send();
+};
+
+function getIngredients(recipe) {
+  const fullIngredients = [];
+  let i = 1;
+  while (recipe[`strIngredient${i}`]) {
+    if (!recipe[`strMeasure${i}`]) { recipe[`strMeasure${i}`] = 'To taste'; }
+    fullIngredients.push({ ingredient: recipe[`strIngredient${i}`], quantity: recipe[`strMeasure${i}`] });
+    i++;
+  }
+  data.currentRecipe.fullIngredients = fullIngredients;
+  console.log('fullIngredients:', fullIngredients);
+
+}
