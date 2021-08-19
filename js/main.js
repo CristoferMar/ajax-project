@@ -21,6 +21,7 @@ var $navSwappers = document.querySelectorAll('.nav-direct');
 var allViews = document.querySelectorAll('.view');
 var $select = document.querySelector('select');
 var userDisplay = document.querySelector('.user-display');
+const pageTitle = document.querySelector('#page-title');
 
 var recipeImg = document.querySelector('#recipe-img');
 var recipeInfo = document.querySelector('#recipe-info');
@@ -46,6 +47,7 @@ window.addEventListener('DOMContentLoaded', function (event) {
   }
   toggleDB(data.currentDB);
   viewSwap(data.currentPage);
+  if (data.currentPage === 'fullRecipe') recipeDataInject(data.currentRecipe);
 });
 
 $select.addEventListener('change', function (event) {
@@ -113,7 +115,6 @@ userDisplay.addEventListener('click', function (event) {
     // update recipe page with info from data.currentRecipe
     clearPrevoiousRecipe();
     viewSwap('fullRecipe');
-    console.log(event.target.closest('.recipe-thumb').getAttribute('id'));
     getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
   }
 
@@ -437,7 +438,7 @@ function toggleDB(currentDB) {
     toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
     toggleRecipePage('drink-border', 'meal-border');
   }
-  // $select.selectedIndex = 0;
+  pageTitle.textContent = data.currentDB;
 }
 
 function toggleRecipePage(oldPageBorders, newPageBorders) {
@@ -507,20 +508,13 @@ const getWholeRecipe = id => {
     URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
     propInResponse = 'drinks';
   }
-  console.log(id);
   var xhr = new XMLHttpRequest();
   xhr.open('GET', URL);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
-    console.log(xhr.status);
     data.currentRecipe = xhr.response[propInResponse][0];
-    console.log('data.currentRecipe:', data.currentRecipe);
-    // generateThumb($list)
-    console.log('Meal', xhr.response);
-    // var mealInfo = xhr.response.meals[0];
     getIngredients(data.currentRecipe);
-    // getInstructions(mealInfo);
-
+    recipeDataInject(data.currentRecipe);
   });
   xhr.send();
 };
@@ -534,6 +528,73 @@ function getIngredients(recipe) {
     i++;
   }
   data.currentRecipe.fullIngredients = fullIngredients;
-  console.log('fullIngredients:', fullIngredients);
+}
 
+function recipeDataInject(recipe) {
+  let page = 'Meal';
+  if (data.currentDB === 'Drinks') {
+    page = 'Drink';
+    var recipeType = document.createElement('h3');
+    recipeType.textContent = 'Type: ';
+    var iDrinkType = document.createElement('i');
+    iDrinkType.textContent = recipe.strAlcoholic;
+    recipeType.appendChild(iDrinkType);
+    recipeType.className = 'marg-btm-1rem';
+
+    var glassType = document.createElement('h3');
+    glassType.textContent = 'Glass Type: ';
+    var iGlass = document.createElement('i');
+    iGlass.textContent = recipe.strGlass;
+    glassType.appendChild(iGlass);
+    glassType.className = 'marg-btm-1rem';
+
+    recipeInfo.append(recipeType, glassType);
+  } else {
+    var recipeOrigin = document.createElement('h3');
+    recipeOrigin.textContent = 'Origin: ';
+    var iOrigin = document.createElement('i');
+    iOrigin.textContent = recipe.strArea;
+    recipeOrigin.appendChild(iOrigin);
+    recipeOrigin.className = 'marg-btm-1rem';
+
+    var recipeYouTube = document.createElement('h3');
+    recipeYouTube.textContent = 'YouTube Tutorial: ';
+    recipeOrigin.className = 'marg-btm-1rem';
+    var aYoutube = document.createElement('a');
+    aYoutube.className = 'youtube-link';
+    aYoutube.setAttribute('href', recipe.strYoutube);
+    aYoutube.setAttribute('target', '_blank');
+    recipeYouTube.appendChild(aYoutube);
+    var linkBtn = document.createElement('i');
+    linkBtn.textContent = 'Link';
+    linkBtn.className = 'font-up-rem';
+    aYoutube.appendChild(linkBtn);
+
+    recipeInfo.append(recipeOrigin, recipeYouTube);
+  }
+
+  var categroy = document.createElement('h3');
+  categroy.textContent = 'Category: ';
+  var iCategory = document.createElement('i');
+  iCategory.textContent = recipe.strCategory;
+  categroy.appendChild(iCategory);
+  categroy.className = 'marg-btm-1rem';
+
+  var recipeName = document.createElement('h1');
+  recipeName.textContent = recipe[`str${page}`];
+  recipeName.className = 'marg-btm-1rem';
+  recipeInfo.prepend(recipeName, categroy);
+  recipeImg.setAttribute('src', recipe[`str${page}Thumb`]);
+
+  recipe.fullIngredients.forEach(pair => {
+    const ingredientEl = document.createElement('p');
+    ingredientEl.className = 'width-50-100';
+    ingredientEl.textContent = `${pair.ingredient} - `;
+    const ingredientQuan = document.createElement('i');
+    ingredientQuan.textContent = pair.quantity;
+    ingredientEl.appendChild(ingredientQuan);
+    ingredients.appendChild(ingredientEl);
+  });
+
+  instructions.textContent = recipe.strInstructions;
 }
