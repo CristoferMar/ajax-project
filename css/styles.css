@@ -194,6 +194,7 @@ p {
   max-height: 100%;
 }
 
+/* Can add left margin here */
 .center-brief {
   display: block;
   width: 64%;
@@ -204,10 +205,6 @@ p {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-i {
-  font-weight: 300;
 }
 
 .full-center {

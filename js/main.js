@@ -191,12 +191,13 @@ function updateHeartIcon(newImgURL, thumbID) {
 }
 
 function handleHeart(target) {
-  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  var page = 'Meal';
   var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
     var destination = $lovedMeals;
     var storageThumb = data.lovedMealThumbs;
   } else {
+    page = 'Drink';
     destination = $lovedDrinks;
     storageThumb = data.lovedDrinkThumbs;
   }
@@ -244,12 +245,13 @@ function updateBookIcon(newImgURL, thumbID) {
 }
 
 function handleBookmark(target) {
-  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  var page = 'Meal';
   var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
     var destination = $bookmarkedMeals;
     var storageThumb = data.bookMealThumbs;
   } else {
+    page = 'Drink';
     destination = $bookmarkedDrinks;
     storageThumb = data.bookDrinkThumbs;
   }
@@ -368,6 +370,7 @@ function generateThumb(response) {
   $centerBrief.className = 'center-brief thumb-padding';
   var $dishName = document.createElement('h2');
   $dishName.textContent = recipeObject['str' + page];
+  $dishName.className = 'marg-btm-1rem';
   var $subTitle1 = document.createElement('p');
   var $describe1 = document.createElement('i');
   var $subTitle2 = document.createElement('p');
@@ -559,7 +562,7 @@ function recipeDataInject(recipe) {
 
     var recipeYouTube = document.createElement('h3');
     recipeYouTube.textContent = 'YouTube Tutorial: ';
-    recipeOrigin.className = 'marg-btm-1rem';
+    recipeYouTube.className = 'marg-btm-1rem';
     var aYoutube = document.createElement('a');
     aYoutube.className = 'youtube-link';
     aYoutube.setAttribute('href', recipe.strYoutube);
@@ -585,6 +588,33 @@ function recipeDataInject(recipe) {
   recipeName.className = 'marg-btm-1rem';
   recipeInfo.prepend(recipeName, categroy);
   recipeImg.setAttribute('src', recipe[`str${page}Thumb`]);
+
+  const buttonHolder = document.createElement('div');
+  // buttonHolder needs a special class where we can find it, using .closest, to retreive the ID
+  buttonHolder.className = 'full-width flex space-evenly';
+  buttonHolder.setAttribute('id', recipe[`id${page}`]);
+  // these buttons have no event listeners that work, yet
+  // I need the event listner to
+  // / toggle the icons
+  // / add or remove the id to data.bookmarkedDrinks / data.bookmarkedMeals
+  // / data.lovedDrinks / data.lovedMeals
+  const heartImg = document.createElement('img');
+  const bookmarkImg = document.createElement('img');
+
+  let heartImgUrl = 'images/Empty_Heart.svg';
+  if (data[`loved${data.currentDB}`].includes(recipe[`id${page}`])) {
+    heartImgUrl = 'images/Filled_Heart.svg';
+  }
+  let bookmarkImgUrl = 'images/Empty_Bookmark.svg';
+  if (data[`bookmarked${data.currentDB}`].includes(recipe[`id${page}`])) {
+    bookmarkImgUrl = 'images/Checked_BookMark.svg';
+  }
+
+  heartImg.setAttribute('src', heartImgUrl);
+  bookmarkImg.setAttribute('src', bookmarkImgUrl);
+  buttonHolder.append(heartImg, bookmarkImg);
+
+  recipeInfo.appendChild(buttonHolder);
 
   recipe.fullIngredients.forEach(pair => {
     const ingredientEl = document.createElement('p');
