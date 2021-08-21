@@ -202,14 +202,14 @@ function handleHeart(target) {
     storageThumb = data.lovedDrinkThumbs;
   }
   if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
-    var targetData = generateStorage(target);
+    const targetData = generateStorage(target);
     storageThumb.unshift(targetData);
 
     if (destination.firstElementChild.matches('.full-center')) {
       destination.firstElementChild.remove();
     }
     data['loved' + data.currentDB].push(currentThumbID);
-    var clone = target.closest('.recipe-thumb').cloneNode(true);
+    const clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
     updateHeartIcon('images/Filled_Heart.svg', currentThumbID);
     return;
@@ -535,8 +535,22 @@ function getIngredients(recipe) {
 
 function recipeDataInject(recipe) {
   let page = 'Meal';
+  let thumbShortcut = [{
+    idMeal: recipe.idMeal,
+    strArea: recipe.strArea,
+    strCategory: recipe.strCategory,
+    strMeal: recipe.strMeal,
+    strMealThumb: recipe.strMealThumb
+  }];
   if (data.currentDB === 'Drinks') {
     page = 'Drink';
+    thumbShortcut = [{
+      idDrink: recipe.idDrink,
+      strAlcoholic: recipe.strAlcoholic,
+      strCategory: recipe.strCategory,
+      strDrink: recipe.strDrink,
+      strDrinkThumb: recipe.strDrinkThumb
+    }];
     var recipeType = document.createElement('h3');
     recipeType.textContent = 'Type: ';
     var iDrinkType = document.createElement('i');
@@ -575,6 +589,7 @@ function recipeDataInject(recipe) {
 
     recipeInfo.append(recipeOrigin, recipeYouTube);
   }
+  const recipeId = recipe[`id${page}`];
 
   var categroy = document.createElement('h3');
   categroy.textContent = 'Category: ';
@@ -592,21 +607,85 @@ function recipeDataInject(recipe) {
   const buttonHolder = document.createElement('div');
   // buttonHolder needs a special class where we can find it, using .closest, to retreive the ID
   buttonHolder.className = 'full-width flex space-evenly';
-  buttonHolder.setAttribute('id', recipe[`id${page}`]);
   // these buttons have no event listeners that work, yet
   // I need the event listner to
   // / toggle the icons
   // / add or remove the id to data.bookmarkedDrinks / data.bookmarkedMeals
   // / data.lovedDrinks / data.lovedMeals
+
+  // var $lovedMeals = document.querySelector('#lovedMeals');
+  // var $bookmarkedMeals = document.querySelector('#bookmarkedMeals');
+  // var $lovedDrinks = document.querySelector('#lovedDrinks');
+  // var $bookmarkedDrinks = document.querySelector('#bookmarkedDrinks');
+
   const heartImg = document.createElement('img');
+  heartImg.addEventListener('click', () => {
+    if (event.target.getAttribute('src') === 'images/Empty_Heart.svg') {
+      event.target.setAttribute('src', 'images/Filled_Heart.svg');
+      updateHeartIcon('images/Filled_Heart.svg', recipeId);
+      data[`loved${data.currentDB}`].push(recipeId);
+      const newThumb = generateThumb(thumbShortcut);
+      data[`loved${page}Thumbs`].unshift(thumbShortcut);
+      if (page === 'Meal') {
+        $lovedMeals.prepend(newThumb);
+      } else {
+        $lovedDrinks.prepend(newThumb);
+      }
+      // X unshift recipe ID onto appripriate data list
+      // X make thumb by passing abridged object info
+      // X unshift abridged data onto approdriate data thumb
+      // prepend thumb userDisplay.children[which ever is correct]
+      // unshift onto appropriate data list
+    } else {
+      event.target.setAttribute('src', 'images/Empty_Heart.svg');
+      updateHeartIcon('images/Empty_Heart.svg', recipeId);
+      // find index of id in data
+      // remove item at said inxed
+      // loop through abridged thumbs to find matching ID
+      // remove abridged item
+      // loop through userDisplay.children[which ever is correct].children to find matching ID
+      // / remove the child with matching ID
+
+    }
+  });
   const bookmarkImg = document.createElement('img');
+  bookmarkImg.addEventListener('click', () => {
+    console.log('event.target', event.target.getAttribute('src'));
+    if (event.target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+      event.target.setAttribute('src', 'images/Checked_BookMark.svg');
+      updateBookIcon('images/Checked_BookMark.svg', recipeId);
+      data[`bookmarked${data.currentDB}`].push(recipeId);
+      const newThumb = generateThumb(thumbShortcut);
+      data[`book${page}Thumbs`].unshift(thumbShortcut);
+      if (page === 'Meal') {
+        $bookmarkedMeals.prepend(newThumb);
+      } else {
+        $bookmarkedDrinks.prepend(newThumb);
+      }
+      // X unshift recipe ID onto appripriate data list
+      // X make thumb by passing abridged object info
+      // X unshift abridged data onto approdriate data thumb
+      // prepend thumb userDisplay.children[which ever is correct]
+      // unshift onto appropriate data list
+    } else {
+      event.target.setAttribute('src', 'images/Empty_Bookmark.svg');
+      updateBookIcon('images/Empty_Bookmark.svg', recipeId);
+      // find index of id in data
+      // remove item at said inxed
+      // loop through abridged thumbs to find matching ID
+      // remove abridged item
+      // loop through userDisplay.children[which ever is correct].children to find matching ID
+      // / remove the child with matching ID
+
+    }
+  });
 
   let heartImgUrl = 'images/Empty_Heart.svg';
-  if (data[`loved${data.currentDB}`].includes(recipe[`id${page}`])) {
+  if (data[`loved${data.currentDB}`].includes(recipeId)) {
     heartImgUrl = 'images/Filled_Heart.svg';
   }
   let bookmarkImgUrl = 'images/Empty_Bookmark.svg';
-  if (data[`bookmarked${data.currentDB}`].includes(recipe[`id${page}`])) {
+  if (data[`bookmarked${data.currentDB}`].includes(recipeId)) {
     bookmarkImgUrl = 'images/Checked_BookMark.svg';
   }
 

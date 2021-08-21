@@ -226,7 +226,7 @@ p {
 }
 
 .space-evenly {
-  justify-content: space-around;
+  justify-content: space-evenly;
 }
 
 .padding-20 {
