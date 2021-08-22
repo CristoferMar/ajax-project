@@ -1,6 +1,3 @@
-// this will reset the dropdown to "My Lists"
-// $select.selectedIndex = 0
-
 var $toggleBtn = document.querySelector('#toggle-Page');
 var gallery = document.querySelector('#recipe-gallery');
 var $lovedMeals = document.querySelector('#lovedMeals');
@@ -111,8 +108,6 @@ userDisplay.addEventListener('click', function (event) {
   } else if (event.target.matches('.loved')) {
     handleHeart(event.target);
   } else if (event.target.closest('.recipe-thumb') !== null) {
-    // GET the recipe by ID, and add it to data.currentRecipe
-    // update recipe page with info from data.currentRecipe
     clearPrevoiousRecipe();
     viewSwap('fullRecipe');
     getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
@@ -288,15 +283,11 @@ function handleBookmark(target) {
 }
 
 function nothingSaved(location) {
-  if (location.getAttribute('id').includes('Meals')) {
-    var page = 'meals';
-  } else {
-    page = 'drinks';
-  }
-  var none = document.createElement('div');
+  const page = location.id.includes('Meals') ? 'meals' : 'drinks';
+  const none = document.createElement('div');
   none.className = 'full-center';
-  var $h4 = document.createElement('h4');
-  $h4.className = page + ' full-center';
+  const $h4 = document.createElement('h4');
+  $h4.className = `${page} full-center`;
   $h4.textContent = 'You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.';
   none.append($h4);
   return none;
@@ -603,80 +594,77 @@ function recipeDataInject(recipe) {
   recipeName.className = 'marg-btm-1rem';
   recipeInfo.prepend(recipeName, categroy);
   recipeImg.setAttribute('src', recipe[`str${page}Thumb`]);
-
   const buttonHolder = document.createElement('div');
-  // buttonHolder needs a special class where we can find it, using .closest, to retreive the ID
   buttonHolder.className = 'full-width flex space-evenly';
-  // these buttons have no event listeners that work, yet
-  // I need the event listner to
-  // / toggle the icons
-  // / add or remove the id to data.bookmarkedDrinks / data.bookmarkedMeals
-  // / data.lovedDrinks / data.lovedMeals
-
-  // var $lovedMeals = document.querySelector('#lovedMeals');
-  // var $bookmarkedMeals = document.querySelector('#bookmarkedMeals');
-  // var $lovedDrinks = document.querySelector('#lovedDrinks');
-  // var $bookmarkedDrinks = document.querySelector('#bookmarkedDrinks');
-
   const heartImg = document.createElement('img');
   heartImg.addEventListener('click', () => {
+    const location = page === 'Meal' ? $lovedMeals : $lovedDrinks;
+
     if (event.target.getAttribute('src') === 'images/Empty_Heart.svg') {
       event.target.setAttribute('src', 'images/Filled_Heart.svg');
       updateHeartIcon('images/Filled_Heart.svg', recipeId);
       data[`loved${data.currentDB}`].push(recipeId);
       const newThumb = generateThumb(thumbShortcut);
       data[`loved${page}Thumbs`].unshift(thumbShortcut);
-      if (page === 'Meal') {
-        $lovedMeals.prepend(newThumb);
-      } else {
-        $lovedDrinks.prepend(newThumb);
+      if (location.firstElementChild.matches('.full-center')) {
+        location.firstElementChild.remove();
       }
-      // X unshift recipe ID onto appripriate data list
-      // X make thumb by passing abridged object info
-      // X unshift abridged data onto approdriate data thumb
-      // prepend thumb userDisplay.children[which ever is correct]
-      // unshift onto appropriate data list
+      location.prepend(newThumb);
     } else {
       event.target.setAttribute('src', 'images/Empty_Heart.svg');
       updateHeartIcon('images/Empty_Heart.svg', recipeId);
-      // find index of id in data
-      // remove item at said inxed
-      // loop through abridged thumbs to find matching ID
-      // remove abridged item
-      // loop through userDisplay.children[which ever is correct].children to find matching ID
-      // / remove the child with matching ID
-
+      const indexToRm = data[`loved${data.currentDB}`].indexOf(recipeId);
+      data[`loved${data.currentDB}`].splice(indexToRm, 1);
+      for (let i = 0; i < data[`loved${page}Thumbs`].length; i++) {
+        if (data[`loved${page}Thumbs`][i][0][`id${page}`] === recipeId) {
+          data[`loved${page}Thumbs`].splice(i, 1);
+          break;
+        }
+      }
+      for (let i = 0; i < location.children.length; i++) {
+        if (location.children[i].id === recipeId) {
+          location.children[i].remove();
+          if (location.children.length === 0) {
+            location.appendChild(nothingSaved(location));
+          }
+          break;
+        }
+      }
     }
   });
   const bookmarkImg = document.createElement('img');
   bookmarkImg.addEventListener('click', () => {
-    console.log('event.target', event.target.getAttribute('src'));
+    const location = page === 'Meal' ? $bookmarkedMeals : $bookmarkedDrinks;
     if (event.target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
       event.target.setAttribute('src', 'images/Checked_BookMark.svg');
       updateBookIcon('images/Checked_BookMark.svg', recipeId);
       data[`bookmarked${data.currentDB}`].push(recipeId);
       const newThumb = generateThumb(thumbShortcut);
       data[`book${page}Thumbs`].unshift(thumbShortcut);
-      if (page === 'Meal') {
-        $bookmarkedMeals.prepend(newThumb);
-      } else {
-        $bookmarkedDrinks.prepend(newThumb);
+      if (location.firstElementChild.matches('.full-center')) {
+        location.firstElementChild.remove();
       }
-      // X unshift recipe ID onto appripriate data list
-      // X make thumb by passing abridged object info
-      // X unshift abridged data onto approdriate data thumb
-      // prepend thumb userDisplay.children[which ever is correct]
-      // unshift onto appropriate data list
+      location.prepend(newThumb);
     } else {
       event.target.setAttribute('src', 'images/Empty_Bookmark.svg');
       updateBookIcon('images/Empty_Bookmark.svg', recipeId);
-      // find index of id in data
-      // remove item at said inxed
-      // loop through abridged thumbs to find matching ID
-      // remove abridged item
-      // loop through userDisplay.children[which ever is correct].children to find matching ID
-      // / remove the child with matching ID
-
+      const indexToRm = data[`bookmarked${data.currentDB}`].indexOf(recipeId);
+      data[`bookmarked${data.currentDB}`].splice(indexToRm, 1);
+      for (let i = 0; i < data[`book${page}Thumbs`].length; i++) {
+        if (data[`book${page}Thumbs`][i][0][`id${page}`] === recipeId) {
+          data[`book${page}Thumbs`].splice(i, 1);
+          break;
+        }
+      }
+      for (let i = 0; i < location.children.length; i++) {
+        if (location.children[i].id === recipeId) {
+          location.children[i].remove();
+          if (location.children.length === 0) {
+            location.appendChild(nothingSaved(location));
+          }
+          break;
+        }
+      }
     }
   });
 
