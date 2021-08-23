@@ -16,7 +16,7 @@
     <div class="nav-container green">
       <div class="row space-between">
         <div class="left-nav">
-          <button class="swap click seamless-btn color-white"><h1 data-view="searched" class="swap">Home</h1></button>
+          <button class="swap click seamless-btn color-white"><h1 data-view="searched" id="page-title" class="swap">Meals</h1></button>
           <select class="expand click green" name="MyLists">
             <option disabled selected hidden>My Lists</option>
             <option class="swap nav-direct" value="bookmarkedMeals" data-view="bookmarkedMeals">Bookmarked</option>
@@ -78,6 +78,34 @@
         <div class="full-center">
           <h4 class="drinks full-center">You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.</h4>
         </div>
+      </div>
+
+      <div class="view hidden" id="fullRecipe" data-view="fullRecipe">
+        <div class="row space-evenly wrap">
+
+          <div class="half-sml marg-btm-1rem">
+            <img id="recipe-img" class="img-thumb" src="https://cdn.dribbble.com/users/2140642/screenshots/4301537/rodrigosloader.gif" alt="Not Available">
+          </div>
+
+          <div class="half-sml meal-border padding-20 marg-btm-1rem height-100 recipe-bubbles" id="recipe-info">
+
+          </div>
+        </div>
+
+        <div class="row column meal-border padding-20 marg-btm-1rem recipe-bubbles">
+          <h2 class="marg-btm-1rem">Ingredients:</h2>
+          <div class="padding-horiz-20 full-width flex wrap" id="ingredients">
+
+          </div>
+        </div>
+
+        <div class="row column meal-border padding-20 marg-btm-1rem recipe-bubbles">
+          <h2 class="marg-btm-1rem">Instructions:</h2>
+          <p class="pre-line" id="instructions">
+
+          </p>
+        </div>
+
       </div>
 
     </div>
