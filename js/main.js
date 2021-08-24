@@ -1,32 +1,32 @@
-var $toggleBtn = document.querySelector('#toggle-Page');
-var gallery = document.querySelector('#recipe-gallery');
-var $lovedMeals = document.querySelector('#lovedMeals');
-var $bookmarkedMeals = document.querySelector('#bookmarkedMeals');
-var $lovedDrinks = document.querySelector('#lovedDrinks');
-var $bookmarkedDrinks = document.querySelector('#bookmarkedDrinks');
+const $toggleBtn = document.querySelector('#toggle-Page');
+const gallery = document.querySelector('#recipe-gallery');
+const $lovedMeals = document.querySelector('#lovedMeals');
+const $bookmarkedMeals = document.querySelector('#bookmarkedMeals');
+const $lovedDrinks = document.querySelector('#lovedDrinks');
+const $bookmarkedDrinks = document.querySelector('#bookmarkedDrinks');
 
-var $navBar = document.querySelector('.nav-container');
-var $uniformColor = document.querySelectorAll('.green');
-var $body = document.querySelector('body');
-var $searchBar = document.querySelector('.search-form');
-var searchCount = 0;
-var $searchImg = document.querySelector('.spy');
-var $start = document.querySelector('#start-page');
-var $pageTitle = document.querySelector('#title');
+const $navBar = document.querySelector('.nav-container');
+const $uniformColor = document.querySelectorAll('.green');
+const $body = document.querySelector('body');
+const $searchBar = document.querySelector('.search-form');
+let searchCount = 0;
+const $searchImg = document.querySelector('.spy');
+const $start = document.querySelector('#start-page');
+const $pageTitle = document.querySelector('#title');
 $start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
-var $navSwappers = document.querySelectorAll('.nav-direct');
-var allViews = document.querySelectorAll('.view');
-var $select = document.querySelector('select');
-var userDisplay = document.querySelector('.user-display');
+const $navSwappers = document.querySelectorAll('.nav-direct');
+const allViews = document.querySelectorAll('.view');
+const $select = document.querySelector('select');
+const userDisplay = document.querySelector('.user-display');
 const pageTitle = document.querySelector('#page-title');
 
-var recipeImg = document.querySelector('#recipe-img');
-var recipeInfo = document.querySelector('#recipe-info');
-var ingredients = document.querySelector('#ingredients');
-var instructions = document.querySelector('#instructions');
-var allRecipeBubbles = document.querySelectorAll('.recipe-bubbles');
+const recipeImg = document.querySelector('#recipe-img');
+const recipeInfo = document.querySelector('#recipe-info');
+const ingredients = document.querySelector('#ingredients');
+const instructions = document.querySelector('#instructions');
+const allRecipeBubbles = document.querySelectorAll('.recipe-bubbles');
 
-window.addEventListener('DOMContentLoaded', function (event) {
+window.addEventListener('DOMContentLoaded', event => {
   if (data.currentDB === 'Meals') {
     loadInList(data.bookMealThumbs, $bookmarkedMeals);
     loadInList(data.lovedMealThumbs, $lovedMeals);
@@ -47,31 +47,29 @@ window.addEventListener('DOMContentLoaded', function (event) {
   if (data.currentPage === 'fullRecipe') recipeDataInject(data.currentRecipe);
 });
 
-$select.addEventListener('change', function (event) {
+$select.addEventListener('change', event => {
   viewSwap(event.target.value);
 });
 
-$navBar.addEventListener('click', function (event) {
+$navBar.addEventListener('click', event => {
   event.preventDefault();
 
   if (event.target.matches('.large-btn')) {
     clearGallery();
-    if (data.currentDB === 'Meals') {
-      data.currentDB = 'Drinks';
-    } else {
-      data.currentDB = 'Meals';
-    }
+    data.currentDB = data.currentDB === 'Meals' ? 'Drinks' : 'Meals';
     toggleDB(data.currentDB);
   }
 
   if (event.target.matches('.randomize')) {
     viewSwap('searched');
     clearGallery();
-    data['searched' + data.currentDB] = [];
+    data[`searched${data.currentDB}`] = [];
     searchCount = 6;
     $searchBar.reset();
-    for (var i = 0; i < 6; i++) {
+    let draws = 6;
+    while (draws > 0) {
       responseGET(getRecipeIDs, 'random.php');
+      draws--;
     }
   }
 
@@ -81,11 +79,11 @@ $navBar.addEventListener('click', function (event) {
 
 });
 
-$searchBar.addEventListener('submit', function (event) {
+$searchBar.addEventListener('submit', event => {
   event.preventDefault();
   clearGallery();
-  data['searched' + data.currentDB] = [];
-  var searched = $searchBar.elements.search.value.toLowerCase();
+  data[`searched${data.currentDB}`] = [];
+  let searched = $searchBar.elements.search.value.toLowerCase();
   if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
 
   if (searched.length < 1) {
@@ -102,7 +100,7 @@ $searchBar.addEventListener('submit', function (event) {
   responseGET(getRecipeIDs, 'filter.php?c=' + searched); // category
 });
 
-userDisplay.addEventListener('click', function (event) {
+userDisplay.addEventListener('click', event => {
   if (event.target.matches('.bookmark')) {
     handleBookmark(event.target);
   } else if (event.target.matches('.loved')) {
@@ -112,10 +110,9 @@ userDisplay.addEventListener('click', function (event) {
     viewSwap('fullRecipe');
     getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
   }
-
 });
 
-function loadInList(pullFrom, appendTo) {
+const loadInList = (pullFrom, appendTo) => {
   if (pullFrom.length === 0) {
     return;
   } else {
@@ -126,11 +123,11 @@ function loadInList(pullFrom, appendTo) {
   for (var i = 0; i < pullFrom.length; i++) {
     appendTo.append(generateThumb(pullFrom[i]));
   }
-}
+};
 
-function viewSwap(location) {
+const viewSwap = location => {
   data.currentPage = location;
-  for (var i = 0; i < allViews.length; i++) {
+  for (let i = 0; i < allViews.length; i++) {
     if (allViews[i].getAttribute('data-view') !== location) {
       if (!allViews[i].matches('.hidden')) {
         allViews[i].className = allViews[i].className.replace('view', 'view hidden');
@@ -151,9 +148,9 @@ function viewSwap(location) {
     }
   }
   $select.selectedIndex = 0;
-}
+};
 
-function generateStorage(target) {
+const generateStorage = target => {
   var currentThumb = target.closest('.recipe-thumb');
   if (data.currentDB === 'Meals') {
     var fullData = [{
@@ -173,21 +170,21 @@ function generateStorage(target) {
     }];
   }
   return fullData;
-}
+};
 
-function updateHeartIcon(newImgURL, thumbID) {
-  for (var i = 0; i < userDisplay.children.length; i++) {
-    for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+const updateHeartIcon = (newImgURL, thumbID) => {
+  for (let i = 0; i < userDisplay.children.length; i++) {
+    for (let j = 0; j < userDisplay.children[i].children.length; j++) {
       if (userDisplay.children[i].children[j].getAttribute('id') === thumbID) {
         userDisplay.children[i].children[j].lastChild.lastChild.firstChild.setAttribute('src', newImgURL);
       }
     }
   }
-}
+};
 
-function handleHeart(target) {
-  var page = 'Meal';
-  var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
+const handleHeart = target => {
+  let page = 'Meal';
+  const currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
     var destination = $lovedMeals;
     var storageThumb = data.lovedMealThumbs;
@@ -227,21 +224,21 @@ function handleHeart(target) {
   if (destination.children.length === 0) {
     destination.append(nothingSaved(destination));
   }
-}
+};
 
-function updateBookIcon(newImgURL, thumbID) {
-  for (var i = 0; i < userDisplay.children.length; i++) {
-    for (var j = 0; j < userDisplay.children[i].children.length; j++) {
+const updateBookIcon = (newImgURL, thumbID) => {
+  for (let i = 0; i < userDisplay.children.length; i++) {
+    for (let j = 0; j < userDisplay.children[i].children.length; j++) {
       if (userDisplay.children[i].children[j].getAttribute('id') === thumbID) {
         userDisplay.children[i].children[j].lastChild.firstChild.firstChild.setAttribute('src', newImgURL);
       }
     }
   }
-}
+};
 
-function handleBookmark(target) {
-  var page = 'Meal';
-  var currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
+const handleBookmark = target => {
+  let page = 'Meal';
+  const currentThumbID = target.closest('.recipe-thumb').getAttribute('id');
   if (data.currentDB === 'Meals') {
     var destination = $bookmarkedMeals;
     var storageThumb = data.bookMealThumbs;
@@ -251,13 +248,13 @@ function handleBookmark(target) {
     storageThumb = data.bookDrinkThumbs;
   }
   if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
-    var targetData = generateStorage(target);
+    const targetData = generateStorage(target);
     storageThumb.unshift(targetData);
     if (destination.firstElementChild.matches('.full-center')) {
       destination.firstElementChild.remove();
     }
     data['bookmarked' + data.currentDB].push(currentThumbID);
-    var clone = target.closest('.recipe-thumb').cloneNode(true);
+    const clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
     updateBookIcon('images/Checked_BookMark.svg', currentThumbID);
     return;
@@ -280,9 +277,9 @@ function handleBookmark(target) {
   if (destination.children.length === 0) {
     destination.append(nothingSaved(destination));
   }
-}
+};
 
-function nothingSaved(location) {
+const nothingSaved = location => {
   const page = location.id.includes('Meals') ? 'meals' : 'drinks';
   const none = document.createElement('div');
   none.className = 'full-center';
@@ -291,23 +288,23 @@ function nothingSaved(location) {
   $h4.textContent = 'You have nothing stored in this page. Try Bookmarking or hitting the Love button on some recipes.';
   none.append($h4);
   return none;
-}
+};
 
-function responseGET(neededFunction, callTail) {
+const responseGET = (neededFunction, callTail) => {
   if (data.currentDB === 'Meals') {
-    var URL = 'https://www.themealdb.com/api/json/v1/1/' + callTail;
+    var URL = `https://www.themealdb.com/api/json/v1/1/${callTail}`;
     var page = 'meals';
   } else {
-    URL = 'https://www.thecocktaildb.com/api/json/v1/1/' + callTail;
+    URL = `https://www.thecocktaildb.com/api/json/v1/1/${callTail}`;
     page = 'drinks';
   }
-  var xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   xhr.open('GET', URL);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     searchCount--;
     if (xhr.response && xhr.response[page] !== null) {
-      var product = neededFunction(xhr.response[page]);
+      const product = neededFunction(xhr.response[page]);
       if (typeof product === 'object' && product.matches('.to-DOM')) {
         gallery.appendChild(product);
       }
@@ -317,55 +314,55 @@ function responseGET(neededFunction, callTail) {
     }
   });
   xhr.send();
-}
+};
 
-function postSearch() {
-  if (data['searched' + data.currentDB].length === 0) {
+const postSearch = () => {
+  if (data[`searched${data.currentDB}`].length === 0) {
     gallery.append(noResults());
     return;
   }
 
-  for (var i = data['searched' + data.currentDB].length - 1; i > 0; i--) {
-    if (data['searched' + data.currentDB].lastIndexOf(data['searched' + data.currentDB][i], i - 1) > -1) {
-      data['searched' + data.currentDB].splice(i, 1);
+  for (var i = data[`searched${data.currentDB}`].length - 1; i > 0; i--) {
+    if (data[`searched${data.currentDB}`].lastIndexOf(data['searched' + data.currentDB][i], i - 1) > -1) {
+      data[`searched${data.currentDB}`].splice(i, 1);
     }
   }
 
-  for (i = 0; i < data['searched' + data.currentDB].length; i++) {
+  for (i = 0; i < data[`searched${data.currentDB}`].length; i++) {
     responseGET(generateThumb, 'lookup.php?i=' + data['searched' + data.currentDB][i]);
   }
-}
+};
 
-function generateThumb(response) {
-  var recipeObject = response[0];
-  var page = data.currentDB.substring(0, data.currentDB.length - 1);
-  var bookmark = 'images/Empty_Bookmark.svg';
-  if (data['bookmarked' + data.currentDB].indexOf(recipeObject['id' + page]) >= 0) { bookmark = 'images/Checked_Bookmark.svg'; }
-  var heart = 'images/Empty_Heart.svg';
-  if (data['loved' + data.currentDB].indexOf(recipeObject['id' + page]) >= 0) { heart = 'images/Filled_Heart.svg'; }
+const generateThumb = response => {
+  const recipeObject = response[0];
+  const page = data.currentDB.substring(0, data.currentDB.length - 1);
+  let bookmark = 'images/Empty_Bookmark.svg';
+  if (data[`bookmarked${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { bookmark = 'images/Checked_BookMark.svg'; }
+  let heart = 'images/Empty_Heart.svg';
+  if (data[`loved${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { heart = 'images/Filled_Heart.svg'; }
 
-  var $recipeThumb = document.createElement('div');
-  $recipeThumb.className = 'to-DOM swap recipe-thumb ' + page.toLowerCase() + '-border';
+  const $recipeThumb = document.createElement('div');
+  $recipeThumb.className = `to-DOM swap recipe-thumb ${page.toLowerCase()}-border`;
   $recipeThumb.setAttribute('data-view', 'fullRecipe');
-  $recipeThumb.setAttribute('id', recipeObject['id' + page]);
+  $recipeThumb.setAttribute('id', recipeObject[`id${page}`]);
 
-  var $leftImg = document.createElement('div');
+  const $leftImg = document.createElement('div');
   $leftImg.className = 'left-img thumb-padding';
-  var $itemThumb = document.createElement('img');
+  const $itemThumb = document.createElement('img');
   $itemThumb.className = 'img-thumb';
-  $itemThumb.setAttribute('alt', 'picture of ' + page.toLowerCase());
-  $itemThumb.setAttribute('src', recipeObject['str' + page + 'Thumb']);
+  $itemThumb.setAttribute('alt', `picture of ${page.toLowerCase()}`);
+  $itemThumb.setAttribute('src', recipeObject[`str${page}Thumb`]);
   $leftImg.appendChild($itemThumb);
 
-  var $centerBrief = document.createElement('div');
+  const $centerBrief = document.createElement('div');
   $centerBrief.className = 'center-brief thumb-padding';
-  var $dishName = document.createElement('h2');
-  $dishName.textContent = recipeObject['str' + page];
+  const $dishName = document.createElement('h2');
+  $dishName.textContent = recipeObject[`str${page}`];
   $dishName.className = 'marg-btm-1rem';
-  var $subTitle1 = document.createElement('p');
-  var $describe1 = document.createElement('i');
-  var $subTitle2 = document.createElement('p');
-  var $describe2 = document.createElement('i');
+  const $subTitle1 = document.createElement('p');
+  const $describe1 = document.createElement('i');
+  const $subTitle2 = document.createElement('p');
+  const $describe2 = document.createElement('i');
   if (data.currentDB === 'Meals') {
     $subTitle1.textContent = 'Origin: ';
     $describe1.textContent = recipeObject.strArea;
@@ -381,18 +378,18 @@ function generateThumb(response) {
   $subTitle2.appendChild($describe2);
   $centerBrief.append($dishName, $subTitle1, $subTitle2);
 
-  var $rightbtns = document.createElement('div');
+  const $rightbtns = document.createElement('div');
   $rightbtns.className = 'right-bookmark';
-  var $bookmarkBtn = document.createElement('button');
+  const $bookmarkBtn = document.createElement('button');
   $bookmarkBtn.className = 'click bookmark-trigger seamless-btn';
-  var $bookmark = document.createElement('img');
+  const $bookmark = document.createElement('img');
   $bookmark.setAttribute('src', bookmark);
   $bookmark.setAttribute('alt', 'Bookmark');
   $bookmark.className = 'full-center bookmark';
   $bookmarkBtn.append($bookmark);
-  var $lovedBtn = document.createElement('button');
+  const $lovedBtn = document.createElement('button');
   $lovedBtn.className = 'click loved-trigger seamless-btn';
-  var $loved = document.createElement('img');
+  const $loved = document.createElement('img');
   $loved.className = 'full-center loved';
   $loved.setAttribute('src', heart);
   $loved.setAttribute('alt', 'Love');
@@ -401,24 +398,24 @@ function generateThumb(response) {
 
   $recipeThumb.append($leftImg, $centerBrief, $rightbtns);
   return $recipeThumb;
-}
+};
 
-function getRecipeIDs(response) {
+const getRecipeIDs = response => {
   var page = data.currentDB.substring(0, data.currentDB.length - 1);
-  for (var i = 0; i < response.length; i++) {
-    if (response[i]['id' + page] !== undefined) {
-      data['searched' + data.currentDB].push(response[i]['id' + page]);
+  for (let i = 0; i < response.length; i++) {
+    if (response[i][`id${page}`] !== undefined) {
+      data[`searched${data.currentDB}`].push(response[i][`id${page}`]);
     }
   }
-}
+};
 
-function clearGallery() {
+const clearGallery = () => {
   while (gallery.firstChild) {
     gallery.removeChild(gallery.firstChild);
   }
-}
+};
 
-function toggleDB(currentDB) {
+const toggleDB = currentDB => {
   if (currentDB === 'Drinks') {
     $body.classList.replace('meal-background', 'drink-background');
     editNavBtns('Meals', 'Drinks');
@@ -433,58 +430,58 @@ function toggleDB(currentDB) {
     toggleRecipePage('drink-border', 'meal-border');
   }
   pageTitle.textContent = data.currentDB;
-}
+};
 
-function toggleRecipePage(oldPageBorders, newPageBorders) {
+const toggleRecipePage = (oldPageBorders, newPageBorders) => {
   allRecipeBubbles.forEach(node => {
     node.classList.replace(oldPageBorders, newPageBorders);
   });
-}
+};
 
-function editNavBtns(oldValue, newValue) {
-  for (var i = 0; i < $navSwappers.length; i++) {
+const editNavBtns = (oldValue, newValue) => {
+  for (let i = 0; i < $navSwappers.length; i++) {
     $navSwappers[i].setAttribute('data-view', $navSwappers[i].getAttribute('data-view').replace(oldValue, newValue));
     if ($navSwappers[i].nodeName === 'OPTION') {
       $navSwappers[i].setAttribute('value', $navSwappers[i].getAttribute('value').replace(oldValue, newValue));
     }
   }
-}
+};
 
-function toggleTouchUp(oldlcDB, newlcDB, oldColor, newColor, newUcDB, imgURL) {
+const toggleTouchUp = (oldlcDB, newlcDB, oldColor, newColor, newUcDB, imgURL) => {
   $pageTitle.className = $pageTitle.className.replace(oldlcDB, newlcDB);
   $toggleBtn.classList.replace(oldColor, newColor);
   $toggleBtn.textContent = newUcDB;
   $searchImg.setAttribute('src', imgURL);
-}
+};
 
-function toggleColors(oldColor, newColor, oldBorder, newBorder) {
-  for (var i = 0; i < $uniformColor.length; i++) {
+const toggleColors = (oldColor, newColor, oldBorder, newBorder) => {
+  for (let i = 0; i < $uniformColor.length; i++) {
     $uniformColor[i].classList.replace(oldColor, newColor);
     $searchBar.children[i].classList.replace(oldBorder, newBorder);
   }
-}
+};
 
-function noResults() {
-  var none = document.createElement('div');
+const noResults = () => {
+  const none = document.createElement('div');
   none.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
-  var $thumb = document.createElement('div');
+  const $thumb = document.createElement('div');
   $thumb.className = 'thumb-padding';
-  var $h4 = document.createElement('h4');
+  const $h4 = document.createElement('h4');
   $h4.textContent = 'Hmm, No Results';
-  var $h5A = document.createElement('h5');
+  const $h5A = document.createElement('h5');
   $h5A.textContent = 'The top right button toggles between Drinks or Meals.';
-  var $h5B = document.createElement('h5');
+  const $h5B = document.createElement('h5');
   $h5B.textContent = 'Find Meals or Drinks by Name or Main Ingredient.';
-  var $h5C = document.createElement('h5');
+  const $h5C = document.createElement('h5');
   $h5C.textContent = 'Find Meals from many Nationalities.';
-  var $h5D = document.createElement('h5');
+  const $h5D = document.createElement('h5');
   $h5D.textContent = 'Search Drinks by Alcoholic or Non Alcoholic.';
   $thumb.append($h4, $h5A, $h5B, $h5C, $h5D);
   none.append($thumb);
   return none;
-}
+};
 
-function clearPrevoiousRecipe() {
+const clearPrevoiousRecipe = () => {
   recipeImg.setAttribute('src', 'https://cdn.dribbble.com/users/2140642/screenshots/4301537/rodrigosloader.gif');
   while (recipeInfo.firstChild) {
     recipeInfo.removeChild(recipeInfo.firstChild);
@@ -493,7 +490,7 @@ function clearPrevoiousRecipe() {
     ingredients.removeChild(ingredients.firstChild);
   }
   instructions.textContent = '';
-}
+};
 
 const getWholeRecipe = id => {
   let URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
@@ -502,7 +499,7 @@ const getWholeRecipe = id => {
     URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
     propInResponse = 'drinks';
   }
-  var xhr = new XMLHttpRequest();
+  const xhr = new XMLHttpRequest();
   xhr.open('GET', URL);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
@@ -513,7 +510,7 @@ const getWholeRecipe = id => {
   xhr.send();
 };
 
-function getIngredients(recipe) {
+const getIngredients = recipe => {
   const fullIngredients = [];
   let i = 1;
   while (recipe[`strIngredient${i}`]) {
@@ -522,9 +519,9 @@ function getIngredients(recipe) {
     i++;
   }
   data.currentRecipe.fullIngredients = fullIngredients;
-}
+};
 
-function recipeDataInject(recipe) {
+const recipeDataInject = recipe => {
   let page = 'Meal';
   let thumbShortcut = [{
     idMeal: recipe.idMeal,
@@ -558,22 +555,22 @@ function recipeDataInject(recipe) {
 
     recipeInfo.append(recipeType, glassType);
   } else {
-    var recipeOrigin = document.createElement('h3');
+    const recipeOrigin = document.createElement('h3');
     recipeOrigin.textContent = 'Origin: ';
-    var iOrigin = document.createElement('i');
+    const iOrigin = document.createElement('i');
     iOrigin.textContent = recipe.strArea;
     recipeOrigin.appendChild(iOrigin);
     recipeOrigin.className = 'marg-btm-1rem';
 
-    var recipeYouTube = document.createElement('h3');
+    const recipeYouTube = document.createElement('h3');
     recipeYouTube.textContent = 'YouTube Tutorial: ';
     recipeYouTube.className = 'marg-btm-1rem';
-    var aYoutube = document.createElement('a');
+    const aYoutube = document.createElement('a');
     aYoutube.className = 'youtube-link';
     aYoutube.setAttribute('href', recipe.strYoutube);
     aYoutube.setAttribute('target', '_blank');
     recipeYouTube.appendChild(aYoutube);
-    var linkBtn = document.createElement('i');
+    const linkBtn = document.createElement('i');
     linkBtn.textContent = 'Link';
     linkBtn.className = 'font-up-rem';
     aYoutube.appendChild(linkBtn);
@@ -582,14 +579,14 @@ function recipeDataInject(recipe) {
   }
   const recipeId = recipe[`id${page}`];
 
-  var categroy = document.createElement('h3');
+  const categroy = document.createElement('h3');
   categroy.textContent = 'Category: ';
-  var iCategory = document.createElement('i');
+  const iCategory = document.createElement('i');
   iCategory.textContent = recipe.strCategory;
   categroy.appendChild(iCategory);
   categroy.className = 'marg-btm-1rem';
 
-  var recipeName = document.createElement('h1');
+  const recipeName = document.createElement('h1');
   recipeName.textContent = recipe[`str${page}`];
   recipeName.className = 'marg-btm-1rem';
   recipeInfo.prepend(recipeName, categroy);
@@ -632,6 +629,7 @@ function recipeDataInject(recipe) {
       }
     }
   });
+
   const bookmarkImg = document.createElement('img');
   bookmarkImg.addEventListener('click', () => {
     const location = page === 'Meal' ? $bookmarkedMeals : $bookmarkedDrinks;
@@ -694,4 +692,4 @@ function recipeDataInject(recipe) {
   });
 
   instructions.textContent = recipe.strInstructions;
-}
+};
