@@ -342,7 +342,7 @@ const generateThumb = response => {
   if (data[`loved${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { heart = 'images/Filled_Heart.svg'; }
 
   const $recipeThumb = document.createElement('div');
-  $recipeThumb.className = `to-DOM swap recipe-thumb ${page.toLowerCase()}-border`;
+  $recipeThumb.className = `to-DOM swap recipe-thumb pointer ${page.toLowerCase()}-border`;
   $recipeThumb.setAttribute('data-view', 'fullRecipe');
   $recipeThumb.setAttribute('id', recipeObject[`id${page}`]);
 
@@ -595,6 +595,7 @@ const recipeDataInject = recipe => {
   const buttonHolder = document.createElement('div');
   buttonHolder.className = 'full-width flex space-evenly';
   const heartImg = document.createElement('img');
+  heartImg.className = 'click';
   heartImg.addEventListener('click', () => {
     const location = page === 'Meal' ? $lovedMeals : $lovedDrinks;
 
@@ -632,6 +633,7 @@ const recipeDataInject = recipe => {
   });
 
   const bookmarkImg = document.createElement('img');
+  bookmarkImg.className = 'click';
   bookmarkImg.addEventListener('click', () => {
     const location = page === 'Meal' ? $bookmarkedMeals : $bookmarkedDrinks;
     if (event.target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
