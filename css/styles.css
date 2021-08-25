@@ -242,6 +242,10 @@ p {
   margin-bottom: 1rem;
 }
 
+.margin-btm-half {
+  margin-bottom: 0.5rem;
+}
+
 .height-100 {
   max-height: 100%;
 }
@@ -260,4 +264,10 @@ p {
 
 .pre-line {
   white-space: pre-line;
+}
+
+.text-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
