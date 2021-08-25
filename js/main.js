@@ -358,9 +358,10 @@ const generateThumb = response => {
   $centerBrief.className = 'center-brief thumb-padding';
   const $dishName = document.createElement('h2');
   $dishName.textContent = recipeObject[`str${page}`];
-  $dishName.className = 'marg-btm-1rem';
+  $dishName.className = 'margin-btm-half';
   const $subTitle1 = document.createElement('p');
   const $describe1 = document.createElement('i');
+  $subTitle1.className = 'text-ellipsis';
   const $subTitle2 = document.createElement('p');
   const $describe2 = document.createElement('i');
   if (data.currentDB === 'Meals') {
