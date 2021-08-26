@@ -20,7 +20,7 @@ if (oldDataJSON !== null) {
   data = JSON.parse(oldDataJSON);
 }
 
-window.addEventListener('beforeunload', function (event) {
+window.addEventListener('pagehide', function (event) {
   var dataJSON = JSON.stringify(data);
   localStorage.setItem('cookItUpData', dataJSON);
 });
