@@ -20,7 +20,9 @@ if (oldDataJSON !== null) {
   data = JSON.parse(oldDataJSON);
 }
 
-window.addEventListener('beforeunload', function (event) {
-  var dataJSON = JSON.stringify(data);
-  localStorage.setItem('cookItUpData', dataJSON);
+window.addEventListener('visibilitychange', event => {
+  if (document.visibilityState !== 'visible') {
+    var dataJSON = JSON.stringify(data);
+    localStorage.setItem('cookItUpData', dataJSON);
+  }
 });
