@@ -79,19 +79,21 @@ $navBar.addEventListener('click', event => {
 
 $searchBar.addEventListener('submit', event => {
   event.preventDefault();
-  loading();
   data[`searched${data.currentDB}`] = [];
   let searched = $searchBar.elements.search.value.toLowerCase();
   if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
 
   if (searched.length < 1) {
+    clearGallery();
     gallery.append(noResults(true));
     return;
   } else if (searched.length < 2) {
+    loading();
     searchCount = 1;
     responseGET(getRecipeIDs, 'search.php?f=' + searched);
     return;
   }
+  loading();
   searchCount = 4;
   responseGET(getRecipeIDs, `search.php?s=${searched}`); // name
   responseGET(getRecipeIDs, `filter.php?i=${searched}`); // ingredient
@@ -300,6 +302,10 @@ const nothingSaved = location => {
 };
 
 const responseGET = (neededFunction, callTail) => {
+  if (!navigator.onLine) {
+    connectionError();
+    return;
+  }
   if (data.currentDB === 'Meals') {
     var URL = `https://www.themealdb.com/api/json/v1/1/${callTail}`;
     var page = 'meals';
@@ -312,6 +318,7 @@ const responseGET = (neededFunction, callTail) => {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     searchCount--;
+    // console.log(xhr.status);
     if (xhr.response && xhr.response[page] !== null) {
       const product = neededFunction(xhr.response[page]);
       if (typeof product === 'object' && product.matches('.to-DOM')) {
@@ -323,6 +330,19 @@ const responseGET = (neededFunction, callTail) => {
     }
   });
   xhr.send();
+};
+
+const connectionError = () => {
+  clearGallery();
+  const ConnectionError = document.createElement('div');
+  ConnectionError.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
+  const $thumb = document.createElement('div');
+  $thumb.className = 'thumb-padding';
+  const $h4 = document.createElement('h5');
+  $h4.textContent = 'Sorry, there was an error connecting to the network! Please check your internet connection.';
+  $thumb.append($h4);
+  ConnectionError.append($thumb);
+  gallery.append(ConnectionError);
 };
 
 const postSearch = () => {
@@ -508,6 +528,11 @@ const clearPrevoiousRecipe = () => {
 };
 
 const getWholeRecipe = id => {
+  if (!navigator.onLine) {
+    viewSwap('searched');
+    connectionError();
+    return;
+  }
   let URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   let propInResponse = 'meals';
   if (data.currentDB === 'Drinks') {
