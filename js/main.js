@@ -318,7 +318,6 @@ const responseGET = (neededFunction, callTail) => {
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     searchCount--;
-    // console.log(xhr.status);
     if (xhr.response && xhr.response[page] !== null) {
       const product = neededFunction(xhr.response[page]);
       if (typeof product === 'object' && product.matches('.to-DOM')) {
