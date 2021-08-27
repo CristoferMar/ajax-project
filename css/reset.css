@@ -14,3 +14,52 @@ i {
 h3 {
   margin: 0;
 }
+
+h1 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.7rem;
+}
+
+h2 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.3rem;
+  width: 100%;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+h4 {
+  font-weight: 400;
+}
+
+h5 {
+  font-weight: 500;
+  margin: 0.5rem 0;
+}
+
+select {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  max-width: 73px;
+  height: 20px;
+}
+
+option {
+  background-color: transparent;
+}
+
+a {
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: opacity 0.5s;
+}
+
+p {
+  margin: 0 0 0.5rem 0;
+  font-weight: 500;
+}
