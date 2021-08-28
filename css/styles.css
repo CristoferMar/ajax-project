@@ -3,55 +3,6 @@
   height: 50px;
 }
 
-h1 {
-  margin: 0;
-  font-weight: 400;
-  font-size: 1.7rem;
-}
-
-h2 {
-  margin: 0;
-  font-weight: 400;
-  font-size: 1.3rem;
-  width: 100%;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-h4 {
-  font-weight: 400;
-}
-
-h5 {
-  font-weight: 500;
-  margin: 0.5rem 0;
-}
-
-select {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  outline: 1px solid rgba(255, 255, 255, 0.3);
-  color: #fff;
-  max-width: 73px;
-  height: 20px;
-}
-
-option {
-  background-color: transparent;
-}
-
-a {
-  color: #fff;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: color 0.5s;
-}
-
-p {
-  margin: 0 0 0.5rem 0;
-  font-weight: 500;
-}
-
 .space-between {
   justify-content: space-between;
 }
@@ -84,14 +35,20 @@ p {
   padding: 0;
 }
 
-.color-white {
+.color-white,
+.randomize {
   color: #fff;
-  transition: color 0.5s;
+  transition: opacity 0.5s;
+}
+
+.opac-hover {
+  transition: opacity 0.5s;
 }
 
 .color-white:hover,
-a.nav-direct:hover {
-  color: #d1d1d1;
+a.nav-direct:hover,
+.randomize:hover {
+  opacity: 80%;
 }
 
 .click {
@@ -286,4 +243,32 @@ a.nav-direct:hover {
 
 .pointer:hover {
   border: solid #02ffd1 2px;
+}
+
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+
+.lds-dual-ring::after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid #fff;
+  border-color: #08891c #fff #5f0ca1;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

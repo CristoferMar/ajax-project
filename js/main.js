@@ -11,9 +11,7 @@ const $body = document.querySelector('body');
 const $searchBar = document.querySelector('.search-form');
 let searchCount = 0;
 const $searchImg = document.querySelector('.spy');
-const $start = document.querySelector('#start-page');
 const $pageTitle = document.querySelector('#title');
-$start.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
 const $navSwappers = document.querySelectorAll('.nav-direct');
 const allViews = document.querySelectorAll('.view');
 const $select = document.querySelector('select');
@@ -61,8 +59,8 @@ $navBar.addEventListener('click', event => {
   }
 
   if (event.target.matches('.randomize')) {
+    loading();
     viewSwap('searched');
-    clearGallery();
     data[`searched${data.currentDB}`] = [];
     searchCount = 6;
     $searchBar.reset();
@@ -81,23 +79,26 @@ $navBar.addEventListener('click', event => {
 
 $searchBar.addEventListener('submit', event => {
   event.preventDefault();
-  clearGallery();
   data[`searched${data.currentDB}`] = [];
   let searched = $searchBar.elements.search.value.toLowerCase();
   if (searched.includes('non') && searched.includes('alcoholic')) { searched = 'non alcoholic'; }
 
   if (searched.length < 1) {
+    clearGallery();
+    gallery.append(noResults(true));
     return;
   } else if (searched.length < 2) {
+    loading();
     searchCount = 1;
     responseGET(getRecipeIDs, 'search.php?f=' + searched);
     return;
   }
+  loading();
   searchCount = 4;
-  responseGET(getRecipeIDs, 'search.php?s=' + searched); // name
-  responseGET(getRecipeIDs, 'filter.php?i=' + searched); // ingredient
-  responseGET(getRecipeIDs, 'filter.php?a=' + searched); // area
-  responseGET(getRecipeIDs, 'filter.php?c=' + searched); // category
+  responseGET(getRecipeIDs, `search.php?s=${searched}`); // name
+  responseGET(getRecipeIDs, `filter.php?i=${searched}`); // ingredient
+  responseGET(getRecipeIDs, `filter.php?a=${searched}`); // area
+  responseGET(getRecipeIDs, `filter.php?c=${searched}`); // category
 });
 
 userDisplay.addEventListener('click', event => {
@@ -111,6 +112,16 @@ userDisplay.addEventListener('click', event => {
     getWholeRecipe(event.target.closest('.recipe-thumb').getAttribute('id'));
   }
 });
+
+const loading = () => {
+  clearGallery();
+  const $loadingBar = document.createElement('div');
+  $loadingBar.className = 'full-center';
+  const $dualRings = document.createElement('div');
+  $dualRings.className = 'lds-dual-ring';
+  $loadingBar.append($dualRings);
+  gallery.append($loadingBar);
+};
 
 const loadInList = (pullFrom, appendTo) => {
   if (pullFrom.length === 0) {
@@ -291,6 +302,10 @@ const nothingSaved = location => {
 };
 
 const responseGET = (neededFunction, callTail) => {
+  if (!navigator.onLine) {
+    connectionError();
+    return;
+  }
   if (data.currentDB === 'Meals') {
     var URL = `https://www.themealdb.com/api/json/v1/1/${callTail}`;
     var page = 'meals';
@@ -316,9 +331,23 @@ const responseGET = (neededFunction, callTail) => {
   xhr.send();
 };
 
+const connectionError = () => {
+  clearGallery();
+  const ConnectionError = document.createElement('div');
+  ConnectionError.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
+  const $thumb = document.createElement('div');
+  $thumb.className = 'thumb-padding';
+  const $h4 = document.createElement('h5');
+  $h4.textContent = 'Sorry, there was an error connecting to the network! Please check your internet connection.';
+  $thumb.append($h4);
+  ConnectionError.append($thumb);
+  gallery.append(ConnectionError);
+};
+
 const postSearch = () => {
+  clearGallery();
   if (data[`searched${data.currentDB}`].length === 0) {
-    gallery.append(noResults());
+    gallery.append(noResults(true));
     return;
   }
 
@@ -430,6 +459,7 @@ const toggleDB = currentDB => {
     toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
     toggleRecipePage('drink-border', 'meal-border');
   }
+  gallery.append(noResults(false));
   pageTitle.textContent = data.currentDB;
 };
 
@@ -462,13 +492,16 @@ const toggleColors = (oldColor, newColor, oldBorder, newBorder) => {
   }
 };
 
-const noResults = () => {
+const noResults = test => {
   const none = document.createElement('div');
   none.className = data.currentDB.substr(0, data.currentDB.length - 1).toLowerCase() + '-border justify-center full-center flex';
   const $thumb = document.createElement('div');
   $thumb.className = 'thumb-padding';
-  const $h4 = document.createElement('h4');
-  $h4.textContent = 'Hmm, No Results';
+  if (test) {
+    const $h4 = document.createElement('h4');
+    $h4.textContent = 'Hmm, No Results';
+    $thumb.append($h4);
+  }
   const $h5A = document.createElement('h5');
   $h5A.textContent = 'The top right button toggles between Drinks or Meals.';
   const $h5B = document.createElement('h5');
@@ -477,7 +510,7 @@ const noResults = () => {
   $h5C.textContent = 'Find Meals from many Nationalities.';
   const $h5D = document.createElement('h5');
   $h5D.textContent = 'Search Drinks by Alcoholic or Non Alcoholic.';
-  $thumb.append($h4, $h5A, $h5B, $h5C, $h5D);
+  $thumb.append($h5A, $h5B, $h5C, $h5D);
   none.append($thumb);
   return none;
 };
@@ -494,6 +527,11 @@ const clearPrevoiousRecipe = () => {
 };
 
 const getWholeRecipe = id => {
+  if (!navigator.onLine) {
+    viewSwap('searched');
+    connectionError();
+    return;
+  }
   let URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   let propInResponse = 'meals';
   if (data.currentDB === 'Drinks') {
