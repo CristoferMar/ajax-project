@@ -10,6 +10,7 @@ const $uniformColor = document.querySelectorAll('.green');
 const $body = document.querySelector('body');
 const $searchBar = document.querySelector('.search-form');
 let searchCount = 0;
+const $searchInput = document.querySelector('.search-bar');
 const $searchImg = document.querySelector('.spy');
 const $pageTitle = document.querySelector('#title');
 const $navSwappers = document.querySelectorAll('.nav-direct');
@@ -460,7 +461,8 @@ const toggleDB = currentDB => {
     toggleRecipePage('drink-border', 'meal-border');
   }
   gallery.append(noResults(false));
-  pageTitle.textContent = data.currentDB;
+  pageTitle.textContent = currentDB;
+  $searchInput.setAttribute('placeholder', `Search ${currentDB}`);
 };
 
 const toggleRecipePage = (oldPageBorders, newPageBorders) => {
@@ -503,11 +505,11 @@ const noResults = test => {
     $thumb.append($h4);
   }
   const $h5A = document.createElement('h5');
-  $h5A.textContent = 'The top right button toggles between Drinks or Meals.';
+  $h5A.textContent = 'The top right button switches between searching for Drinks or Meals.';
   const $h5B = document.createElement('h5');
-  $h5B.textContent = 'Find Meals or Drinks by Name or Main Ingredient.';
+  $h5B.textContent = 'Search Meals or Drinks by Name or Main Ingredient.';
   const $h5C = document.createElement('h5');
-  $h5C.textContent = 'Find Meals from many Nationalities.';
+  $h5C.textContent = 'Search Meals from many Nationalities.';
   const $h5D = document.createElement('h5');
   $h5D.textContent = 'Search Drinks by Alcoholic or Non Alcoholic.';
   $thumb.append($h5A, $h5B, $h5C, $h5D);
