@@ -228,6 +228,7 @@ a.nav-direct:hover,
 
 .pre-line {
   white-space: pre-line;
+  line-height: 1.35;
 }
 
 .text-ellipsis {
@@ -243,6 +244,10 @@ a.nav-direct:hover,
 
 .pointer:hover {
   border: solid #02ffd1 2px;
+}
+
+.lato {
+  font-family: 'Lato', sans-serif;
 }
 
 .lds-dual-ring {
