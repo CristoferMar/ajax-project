@@ -633,7 +633,7 @@ const recipeDataInject = recipe => {
   recipeInfo.prepend(recipeName, categroy);
   recipeImg.setAttribute('src', recipe[`str${page}Thumb`]);
   const buttonHolder = document.createElement('div');
-  buttonHolder.className = 'full-width flex space-evenly';
+  buttonHolder.className = 'flex space-evenly';
   const heartImg = document.createElement('img');
   heartImg.className = 'click';
   heartImg.addEventListener('click', () => {

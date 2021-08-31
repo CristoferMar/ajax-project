@@ -1,5 +1,5 @@
 .nav-container {
-  width: 100%;
+  /* width: 100%; */
   height: 50px;
 }
 
@@ -174,10 +174,6 @@ a.nav-direct:hover,
 .full-center {
   width: 100%;
   text-align: center;
-}
-
-.full-width {
-  width: 100%;
 }
 
 .bookmark-trigger,
