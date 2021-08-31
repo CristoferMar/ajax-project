@@ -1,5 +1,5 @@
 .nav-container {
-  width: 100%;
+  /* width: 100%; */
   height: 50px;
 }
 
@@ -176,10 +176,6 @@ a.nav-direct:hover,
   text-align: center;
 }
 
-.full-width {
-  width: 100%;
-}
-
 .bookmark-trigger,
 .loved-trigger {
   width: 20px;
@@ -228,6 +224,7 @@ a.nav-direct:hover,
 
 .pre-line {
   white-space: pre-line;
+  line-height: 1.35;
 }
 
 .text-ellipsis {
@@ -243,6 +240,12 @@ a.nav-direct:hover,
 
 .pointer:hover {
   border: solid #02ffd1 2px;
+}
+
+.lato {
+  font-weight: 400;
+  font-family: 'Lato', sans-serif;
+  font-style: italic;
 }
 
 .lds-dual-ring {

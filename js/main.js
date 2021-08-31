@@ -388,7 +388,7 @@ const generateThumb = response => {
   $centerBrief.className = 'center-brief thumb-padding';
   const $dishName = document.createElement('h2');
   $dishName.textContent = recipeObject[`str${page}`];
-  $dishName.className = 'margin-btm-half';
+  $dishName.className = 'margin-btm-half lato';
   const $subTitle1 = document.createElement('p');
   const $describe1 = document.createElement('i');
   $subTitle1.className = 'text-ellipsis';
@@ -633,7 +633,7 @@ const recipeDataInject = recipe => {
   recipeInfo.prepend(recipeName, categroy);
   recipeImg.setAttribute('src', recipe[`str${page}Thumb`]);
   const buttonHolder = document.createElement('div');
-  buttonHolder.className = 'full-width flex space-evenly';
+  buttonHolder.className = 'flex space-evenly';
   const heartImg = document.createElement('img');
   heartImg.className = 'click';
   heartImg.addEventListener('click', () => {
