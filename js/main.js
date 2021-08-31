@@ -132,7 +132,7 @@ const loadInList = (pullFrom, appendTo) => {
       appendTo.firstElementChild.remove();
     }
   }
-  for (var i = 0; i < pullFrom.length; i++) {
+  for (let i = 0; i < pullFrom.length; i++) {
     appendTo.append(generateThumb(pullFrom[i]));
   }
 };
@@ -163,7 +163,7 @@ const viewSwap = location => {
 };
 
 const generateStorage = target => {
-  var currentThumb = target.closest('.recipe-thumb');
+  const currentThumb = target.closest('.recipe-thumb');
   if (data.currentDB === 'Meals') {
     var fullData = [{
       idMeal: currentThumb.closest('.recipe-thumb').getAttribute('id'),
@@ -224,7 +224,7 @@ const handleHeart = target => {
       break;
     }
   }
-  var position = data['loved' + data.currentDB].indexOf(currentThumbID);
+  const position = data['loved' + data.currentDB].indexOf(currentThumbID);
   data['loved' + data.currentDB].splice(position, 1);
   for (i = 0; i < destination.children.length; i++) {
     if (destination.children[i].getAttribute('id') === currentThumbID) {
@@ -277,7 +277,7 @@ const handleBookmark = target => {
       break;
     }
   }
-  var position = data['bookmarked' + data.currentDB].indexOf(currentThumbID);
+  const position = data['bookmarked' + data.currentDB].indexOf(currentThumbID);
   data['bookmarked' + data.currentDB].splice(position, 1);
   for (i = 0; i < destination.children.length; i++) {
     if (destination.children[i].getAttribute('id') === currentThumbID) {
@@ -307,13 +307,9 @@ const responseGET = (neededFunction, callTail) => {
     connectionError();
     return;
   }
-  if (data.currentDB === 'Meals') {
-    var URL = `https://www.themealdb.com/api/json/v1/1/${callTail}`;
-    var page = 'meals';
-  } else {
-    URL = `https://www.thecocktaildb.com/api/json/v1/1/${callTail}`;
-    page = 'drinks';
-  }
+  const page = data.currentDB.toLocaleLowerCase();
+  const URL = data.currentDB === 'Meals' ? `https://www.themealdb.com/api/json/v1/1/${callTail}` : `https://www.thecocktaildb.com/api/json/v1/1/${callTail}`;
+
   const xhr = new XMLHttpRequest();
   xhr.open('GET', URL);
   xhr.responseType = 'json';
@@ -432,7 +428,7 @@ const generateThumb = response => {
 };
 
 const getRecipeIDs = response => {
-  var page = data.currentDB.substring(0, data.currentDB.length - 1);
+  const page = data.currentDB.substring(0, data.currentDB.length - 1);
   for (let i = 0; i < response.length; i++) {
     if (response[i][`id${page}`] !== undefined) {
       data[`searched${data.currentDB}`].push(response[i][`id${page}`]);
@@ -580,16 +576,16 @@ const recipeDataInject = recipe => {
       strDrink: recipe.strDrink,
       strDrinkThumb: recipe.strDrinkThumb
     }];
-    var recipeType = document.createElement('h3');
+    const recipeType = document.createElement('h3');
     recipeType.textContent = 'Type: ';
-    var iDrinkType = document.createElement('i');
+    const iDrinkType = document.createElement('i');
     iDrinkType.textContent = recipe.strAlcoholic;
     recipeType.appendChild(iDrinkType);
     recipeType.className = 'marg-btm-1rem';
 
-    var glassType = document.createElement('h3');
+    const glassType = document.createElement('h3');
     glassType.textContent = 'Glass Type: ';
-    var iGlass = document.createElement('i');
+    const iGlass = document.createElement('i');
     iGlass.textContent = recipe.strGlass;
     glassType.appendChild(iGlass);
     glassType.className = 'marg-btm-1rem';
