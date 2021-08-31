@@ -205,7 +205,7 @@ const handleHeart = target => {
     destination = $lovedDrinks;
     storageThumb = data.lovedDrinkThumbs;
   }
-  if (target.getAttribute('src') === 'images/Empty_Heart.svg') {
+  if (target.getAttribute('src') === 'images/empty-heart.svg') {
     const targetData = generateStorage(target);
     storageThumb.unshift(targetData);
 
@@ -215,7 +215,7 @@ const handleHeart = target => {
     data['loved' + data.currentDB].push(currentThumbID);
     const clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
-    updateHeartIcon('images/Filled_Heart.svg', currentThumbID);
+    updateHeartIcon('images/filled-heart.svg', currentThumbID);
     return;
   }
   for (var i = 0; i < storageThumb.length; i++) {
@@ -232,7 +232,7 @@ const handleHeart = target => {
       break;
     }
   }
-  updateHeartIcon('images/Empty_Heart.svg', currentThumbID);
+  updateHeartIcon('images/empty-heart.svg', currentThumbID);
   if (destination.children.length === 0) {
     destination.append(nothingSaved(destination));
   }
@@ -259,7 +259,7 @@ const handleBookmark = target => {
     destination = $bookmarkedDrinks;
     storageThumb = data.bookDrinkThumbs;
   }
-  if (target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
+  if (target.getAttribute('src') === 'images/empty-bookmark.svg') {
     const targetData = generateStorage(target);
     storageThumb.unshift(targetData);
     if (destination.firstElementChild.matches('.full-center')) {
@@ -268,7 +268,7 @@ const handleBookmark = target => {
     data['bookmarked' + data.currentDB].push(currentThumbID);
     const clone = target.closest('.recipe-thumb').cloneNode(true);
     destination.prepend(clone);
-    updateBookIcon('images/Checked_BookMark.svg', currentThumbID);
+    updateBookIcon('images/checked-bookmark.svg', currentThumbID);
     return;
   }
   for (var i = 0; i < storageThumb.length; i++) {
@@ -285,7 +285,7 @@ const handleBookmark = target => {
       break;
     }
   }
-  updateBookIcon('images/Empty_Bookmark.svg', currentThumbID);
+  updateBookIcon('images/empty-bookmark.svg', currentThumbID);
   if (destination.children.length === 0) {
     destination.append(nothingSaved(destination));
   }
@@ -366,10 +366,10 @@ const postSearch = () => {
 const generateThumb = response => {
   const recipeObject = response[0];
   const page = data.currentDB.substring(0, data.currentDB.length - 1);
-  let bookmark = 'images/Empty_Bookmark.svg';
-  if (data[`bookmarked${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { bookmark = 'images/Checked_BookMark.svg'; }
-  let heart = 'images/Empty_Heart.svg';
-  if (data[`loved${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { heart = 'images/Filled_Heart.svg'; }
+  let bookmark = 'images/empty-bookmark.svg';
+  if (data[`bookmarked${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { bookmark = 'images/checked-bookmark.svg'; }
+  let heart = 'images/empty-heart.svg';
+  if (data[`loved${data.currentDB}`].indexOf(recipeObject[`id${page}`]) >= 0) { heart = 'images/filled-heart.svg'; }
 
   const $recipeThumb = document.createElement('div');
   $recipeThumb.className = `to-DOM swap recipe-thumb pointer ${page.toLowerCase()}-border`;
@@ -451,13 +451,13 @@ const toggleDB = currentDB => {
     $body.classList.replace('meal-background', 'drink-background');
     editNavBtns('Meals', 'Drinks');
     toggleColors('green', 'purple', 'meal-search', 'drink-search');
-    toggleTouchUp('meals', 'drinks', 'purple', 'green', 'Meals', 'images/Spy_Glass_White.svg');
+    toggleTouchUp('meals', 'drinks', 'purple', 'green', 'Meals', 'images/spy-glass-white.svg');
     toggleRecipePage('meal-border', 'drink-border');
   } else {
     $body.classList.replace('drink-background', 'meal-background');
     editNavBtns('Drinks', 'Meals');
     toggleColors('purple', 'green', 'drink-search', 'meal-search');
-    toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/Spy_Glass.svg');
+    toggleTouchUp('drinks', 'meals', 'green', 'purple', 'Drinks', 'images/spy-glass-black.svg');
     toggleRecipePage('drink-border', 'meal-border');
   }
   gallery.append(noResults(false));
@@ -639,9 +639,9 @@ const recipeDataInject = recipe => {
   heartImg.addEventListener('click', () => {
     const location = page === 'Meal' ? $lovedMeals : $lovedDrinks;
 
-    if (event.target.getAttribute('src') === 'images/Empty_Heart.svg') {
-      event.target.setAttribute('src', 'images/Filled_Heart.svg');
-      updateHeartIcon('images/Filled_Heart.svg', recipeId);
+    if (event.target.getAttribute('src') === 'images/empty-heart.svg') {
+      event.target.setAttribute('src', 'images/filled-heart.svg');
+      updateHeartIcon('images/filled-heart.svg', recipeId);
       data[`loved${data.currentDB}`].push(recipeId);
       const newThumb = generateThumb(thumbShortcut);
       data[`loved${page}Thumbs`].unshift(thumbShortcut);
@@ -650,8 +650,8 @@ const recipeDataInject = recipe => {
       }
       location.prepend(newThumb);
     } else {
-      event.target.setAttribute('src', 'images/Empty_Heart.svg');
-      updateHeartIcon('images/Empty_Heart.svg', recipeId);
+      event.target.setAttribute('src', 'images/empty-heart.svg');
+      updateHeartIcon('images/empty-heart.svg', recipeId);
       const indexToRm = data[`loved${data.currentDB}`].indexOf(recipeId);
       data[`loved${data.currentDB}`].splice(indexToRm, 1);
       for (let i = 0; i < data[`loved${page}Thumbs`].length; i++) {
@@ -676,9 +676,9 @@ const recipeDataInject = recipe => {
   bookmarkImg.className = 'click';
   bookmarkImg.addEventListener('click', () => {
     const location = page === 'Meal' ? $bookmarkedMeals : $bookmarkedDrinks;
-    if (event.target.getAttribute('src') === 'images/Empty_Bookmark.svg') {
-      event.target.setAttribute('src', 'images/Checked_BookMark.svg');
-      updateBookIcon('images/Checked_BookMark.svg', recipeId);
+    if (event.target.getAttribute('src') === 'images/empty-bookmark.svg') {
+      event.target.setAttribute('src', 'images/checked-bookmark.svg');
+      updateBookIcon('images/checked-bookmark.svg', recipeId);
       data[`bookmarked${data.currentDB}`].push(recipeId);
       const newThumb = generateThumb(thumbShortcut);
       data[`book${page}Thumbs`].unshift(thumbShortcut);
@@ -687,8 +687,8 @@ const recipeDataInject = recipe => {
       }
       location.prepend(newThumb);
     } else {
-      event.target.setAttribute('src', 'images/Empty_Bookmark.svg');
-      updateBookIcon('images/Empty_Bookmark.svg', recipeId);
+      event.target.setAttribute('src', 'images/empty-bookmark.svg');
+      updateBookIcon('images/empty-bookmark.svg', recipeId);
       const indexToRm = data[`bookmarked${data.currentDB}`].indexOf(recipeId);
       data[`bookmarked${data.currentDB}`].splice(indexToRm, 1);
       for (let i = 0; i < data[`book${page}Thumbs`].length; i++) {
@@ -709,13 +709,13 @@ const recipeDataInject = recipe => {
     }
   });
 
-  let heartImgUrl = 'images/Empty_Heart.svg';
+  let heartImgUrl = 'images/empty-heart.svg';
   if (data[`loved${data.currentDB}`].includes(recipeId)) {
-    heartImgUrl = 'images/Filled_Heart.svg';
+    heartImgUrl = 'images/filled-heart.svg';
   }
-  let bookmarkImgUrl = 'images/Empty_Bookmark.svg';
+  let bookmarkImgUrl = 'images/empty-bookmark.svg';
   if (data[`bookmarked${data.currentDB}`].includes(recipeId)) {
-    bookmarkImgUrl = 'images/Checked_BookMark.svg';
+    bookmarkImgUrl = 'images/checked-bookmark.svg';
   }
 
   heartImg.setAttribute('src', heartImgUrl);
