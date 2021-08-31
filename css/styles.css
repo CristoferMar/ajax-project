@@ -247,7 +247,9 @@ a.nav-direct:hover,
 }
 
 .lato {
+  font-weight: 400;
   font-family: 'Lato', sans-serif;
+  font-style: italic;
 }
 
 .lds-dual-ring {
