@@ -2,7 +2,7 @@
 A web application for chef hobbyists & mixologists who want to explore worldwide food recipes or discover unique cocktail drinks.
 
 ## Motivation
-I wanted to apply my current **HTML**, **CSS**, and **JavaScript** knowledge to create something everyone and myself could enjoy. Because I enjoy cooking and have mixologist peers, I thought this would be an excellent way to display my skills and push them to the limit. With both databases having similar **APIs**, I figured I could merge the worlds of meals and cocktails into one, straightforward application.
+I wanted to apply my current **HTML**, **CSS**, and **JavaScript** knowledge to create something everyone and myself could enjoy. Because I enjoy cooking and have mixologist peers. I thought this would be an excellent way to display my skills and push them to the limit. With both databases having similar **APIs**, I figured I could merge the worlds of meals and cocktails into one, straightforward application.
 
 ## Technologies Used
 This application was built using **HTML5**, **CSS3**, and **JavaSript**. It pulls data from **TheMealDB** and **TheCocktailDB** with their **APIs**, using **AJAX**.
