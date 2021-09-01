@@ -1,4 +1,4 @@
-# Cook It Up, an AJAX Project
+# Cook It Up
 A web application for chef hobbyists & mixologists who want to explore worldwide food recipes or discover unique cocktail drinks.
 
 ## Motivation
