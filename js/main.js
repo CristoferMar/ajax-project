@@ -308,10 +308,10 @@ const responseGET = (neededFunction, callTail) => {
     return;
   }
   const page = data.currentDB.toLocaleLowerCase();
-  const URL = data.currentDB === 'Meals' ? `https://www.themealdb.com/api/json/v1/1/${callTail}` : `https://www.thecocktaildb.com/api/json/v1/1/${callTail}`;
+  const url = data.currentDB === 'Meals' ? `https://www.themealdb.com/api/json/v1/1/${callTail}` : `https://www.thecocktaildb.com/api/json/v1/1/${callTail}`;
 
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', URL);
+  xhr.open('GET', url);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     searchCount--;
@@ -530,14 +530,14 @@ const getWholeRecipe = id => {
     connectionError();
     return;
   }
-  let URL = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
+  let url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`;
   let propInResponse = 'meals';
   if (data.currentDB === 'Drinks') {
-    URL = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+    url = `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
     propInResponse = 'drinks';
   }
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', URL);
+  xhr.open('GET', url);
   xhr.responseType = 'json';
   xhr.addEventListener('load', function () {
     data.currentRecipe = xhr.response[propInResponse][0];
