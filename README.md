@@ -1,6 +1,8 @@
 # Cook It Up
 A web application for chef hobbyists & mixologists who want to explore worldwide food recipes or discover unique cocktail drinks.
 
+![CookItUp-ReadMe-Demo-GIF](https://user-images.githubusercontent.com/82407007/131764563-457f2091-ff05-4bb0-8f83-a9cf6c537249.gif)
+
 ## Motivation
 I wanted to apply my current **HTML**, **CSS**, and **JavaScript** knowledge to create something everyone and myself could enjoy. Because I enjoy cooking and have mixologist peers. I thought this would be an excellent way to display my skills and push them to the limit. With both databases having similar **APIs**, I figured I could merge the worlds of meals and cocktails into one, straightforward application.
 
