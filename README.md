@@ -1,5 +1,5 @@
 # Cook It Up
-A web application for chef hobbyists & mixologists who want to explore worldwide food recipes or discover unique cocktail drinks.
+A web application for chef hobbyists & mixologists who want to explore worldwide food recipes or discover unique cocktails.
 
 ![CookItUp-ReadMe-Demo-GIF](https://user-images.githubusercontent.com/82407007/131764563-457f2091-ff05-4bb0-8f83-a9cf6c537249.gif)
 
